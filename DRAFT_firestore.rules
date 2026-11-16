@@ -1,0 +1,419 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Default-Deny Catch-All Rule
+    // ===============================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function hasVerifiedEmail() {
+      return isAuthenticated() &&
+        request.auth.token.email != null &&
+        request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isBootstrappedOwnerEmail() {
+      return hasVerifiedEmail() &&
+        request.auth.token.email == "ajmedset2004@gmail.com";
+    }
+
+    function hasAccessDoc() {
+      return exists(/databases/$(database)/documents/config/access);
+    }
+
+    function getAccessData() {
+      return get(/databases/$(database)/documents/config/access).data;
+    }
+
+    function hasUserDoc(uid) {
+      return exists(/databases/$(database)/documents/users/$(uid));
+    }
+
+    function getUserRole(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data.role;
+    }
+
+    function isOwner() {
+      return isAuthenticated() && (
+        isBootstrappedOwnerEmail() ||
+        (hasAccessDoc() && (
+          getAccessData().ownerUid == request.auth.uid ||
+          (hasVerifiedEmail() && getAccessData().ownerEmail == request.auth.token.email)
+        )) ||
+        (hasUserDoc(request.auth.uid) && getUserRole(request.auth.uid) == 'owner')
+      );
+    }
+
+    function isRania() {
+      return isAuthenticated() && (
+        (hasAccessDoc() && (
+          getAccessData().raniaUid == request.auth.uid ||
+          (hasVerifiedEmail() && getAccessData().raniaEmail == request.auth.token.email)
+        )) ||
+        (hasUserDoc(request.auth.uid) && getUserRole(request.auth.uid) == 'rania')
+      );
+    }
+
+    function isAuthorizedUser() {
+      return isOwner() || isRania();
+    }
+
+    function isSelf(userId) {
+      return isAuthenticated() && request.auth.uid == userId && isAuthorizedUser();
+    }
+
+    function isValidCardioCategory(cat) {
+      return cat in [
+        'Physiologie cardiaque',
+        'Électrocardiogramme (ECG)',
+        'Troubles du rythme',
+        'Insuffisance cardiaque',
+        'Valvulopathies',
+        'Hypertension artérielle',
+        'Cardiac Physiology',
+        'ECG',
+        'Arrhythmias',
+        'Heart Failure',
+        'Valvular Diseases',
+        'Hypertension'
+      ];
+    }
+
+    // ===============================================================
+    // Schema Validators
+    // ===============================================================
+    function isValidAccessConfig(data) {
+      return data.keys().hasAll(['ownerEmail', 'ownerUid', 'raniaEmail', 'updatedAt']) &&
+        data.keys().hasOnly(['ownerEmail', 'ownerUid', 'raniaEmail', 'raniaUid', 'updatedAt']) &&
+        data.ownerEmail is string && data.ownerEmail.size() >= 3 && data.ownerEmail.size() <= 200 &&
+        data.ownerUid is string && data.ownerUid.size() >= 1 && data.ownerUid.size() <= 128 &&
+        data.raniaEmail is string && data.raniaEmail.size() >= 3 && data.raniaEmail.size() <= 200 &&
+        (!('raniaUid' in data) || (data.raniaUid is string && data.raniaUid.size() <= 128)) &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'email', 'displayName', 'role', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'email', 'displayName', 'role', 'createdAt', 'updatedAt']) &&
+        data.uid == userId &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 200 &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 120 &&
+        data.role in ['owner', 'rania'] &&
+        data.createdAt is string && data.createdAt.size() <= 64 &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidUserSettings(data, userId) {
+      return data.keys().hasAll([
+        'uid', 'recipientName', 'language', 'dailyAffirmation', 'dailyRestReminder',
+        'focusMinutes', 'shortBreakMinutes', 'longBreakMinutes', 'soundEnabled',
+        'completedPomodoroSessions', 'hydrationCountToday', 'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'uid', 'recipientName', 'language', 'dailyAffirmation', 'dailyRestReminder',
+        'focusMinutes', 'shortBreakMinutes', 'longBreakMinutes', 'soundEnabled',
+        'completedPomodoroSessions', 'hydrationCountToday', 'customHugMessage',
+        'customHugSubtext', 'updatedAt'
+      ]) &&
+      data.uid == userId &&
+      data.recipientName is string && data.recipientName.size() >= 1 && data.recipientName.size() <= 100 &&
+      data.language in ['en', 'fr'] &&
+      data.dailyAffirmation is string && data.dailyAffirmation.size() <= 1000 &&
+      data.dailyRestReminder is string && data.dailyRestReminder.size() <= 1000 &&
+      data.focusMinutes is number && data.focusMinutes >= 1 && data.focusMinutes <= 180 &&
+      data.shortBreakMinutes is number && data.shortBreakMinutes >= 1 && data.shortBreakMinutes <= 90 &&
+      data.longBreakMinutes is number && data.longBreakMinutes >= 1 && data.longBreakMinutes <= 120 &&
+      data.soundEnabled is bool &&
+      data.completedPomodoroSessions is number && data.completedPomodoroSessions >= 0 && data.completedPomodoroSessions <= 100000 &&
+      data.hydrationCountToday is number && data.hydrationCountToday >= 0 && data.hydrationCountToday <= 100 &&
+      (!('customHugMessage' in data) || (data.customHugMessage is string && data.customHugMessage.size() <= 1000)) &&
+      (!('customHugSubtext' in data) || (data.customHugSubtext is string && data.customHugSubtext.size() <= 1000)) &&
+      data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidStudyTopic(data, userId, topicId) {
+      return data.keys().hasAll(['id', 'uid', 'title', 'module', 'priority', 'dueDate', 'completed', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'uid', 'title', 'module', 'priority', 'dueDate', 'completed', 'notes', 'isSample', 'updatedAt']) &&
+        data.id == topicId &&
+        data.uid == userId &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 300 &&
+        data.module is string && data.module.size() >= 1 && data.module.size() <= 160 &&
+        data.priority in ['High', 'Medium', 'Gentle'] &&
+        data.dueDate is string && data.dueDate.size() >= 4 && data.dueDate.size() <= 32 &&
+        data.completed is bool &&
+        (!('notes' in data) || (data.notes is string && data.notes.size() <= 5000)) &&
+        (!('isSample' in data) || data.isSample is bool) &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidFlashcard(data, userId, cardId) {
+      return data.keys().hasAll(['id', 'uid', 'category', 'question', 'answer', 'lectureRef', 'mastered', 'isSample', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'uid', 'category', 'question', 'answer', 'lectureRef', 'mastered', 'reviewStatus', 'lastReviewedDate', 'isSample', 'updatedAt']) &&
+        data.id == cardId &&
+        data.uid == userId &&
+        isValidCardioCategory(data.category) &&
+        data.question is string && data.question.size() >= 1 && data.question.size() <= 2000 &&
+        data.answer is string && data.answer.size() >= 1 && data.answer.size() <= 5000 &&
+        data.lectureRef is string && data.lectureRef.size() <= 300 &&
+        data.mastered is bool &&
+        (!('reviewStatus' in data) || data.reviewStatus in ['unseen', 'understood', 'needs_revision']) &&
+        (!('lastReviewedDate' in data) || (data.lastReviewedDate is string && data.lastReviewedDate.size() <= 32)) &&
+        data.isSample is bool &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidQuizQuestion(data, userId, quizId) {
+      return data.keys().hasAll(['id', 'uid', 'category', 'question', 'options', 'correctIndex', 'explanation', 'lectureRef', 'isSample', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'uid', 'category', 'question', 'options', 'correctIndex', 'correctIndices', 'isMultipleChoice', 'explanation', 'lectureRef', 'isSample', 'updatedAt']) &&
+        data.id == quizId &&
+        data.uid == userId &&
+        isValidCardioCategory(data.category) &&
+        data.question is string && data.question.size() >= 1 && data.question.size() <= 2000 &&
+        data.options is list && data.options.size() >= 2 && data.options.size() <= 6 &&
+        data.correctIndex is number && data.correctIndex >= 0 && data.correctIndex < data.options.size() &&
+        (!('correctIndices' in data) || (data.correctIndices is list && data.correctIndices.size() >= 1 && data.correctIndices.size() <= 6)) &&
+        (!('isMultipleChoice' in data) || data.isMultipleChoice is bool) &&
+        data.explanation is string && data.explanation.size() <= 5000 &&
+        data.lectureRef is string && data.lectureRef.size() <= 300 &&
+        data.isSample is bool &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidEcgNote(data, userId, noteId) {
+      return data.keys().hasAll(['id', 'uid', 'label', 'title', 'educationalConcept', 'personalNote', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'uid', 'label', 'title', 'educationalConcept', 'personalNote', 'updatedAt']) &&
+        data.id == noteId &&
+        data.id in ['P', 'PR', 'QRS', 'ST', 'T'] &&
+        data.uid == userId &&
+        data.label is string && data.label.size() >= 1 && data.label.size() <= 80 &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 200 &&
+        data.educationalConcept is string && data.educationalConcept.size() <= 5000 &&
+        data.personalNote is string && data.personalNote.size() <= 5000 &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidJournalEntry(data, userId, entryId) {
+      return data.keys().hasAll(['id', 'uid', 'date', 'mood', 'gratitudePrompt', 'gratitudeAnswer', 'achievement', 'dailyNote', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'uid', 'date', 'mood', 'gratitudePrompt', 'gratitudeAnswer', 'achievement', 'dailyNote', 'isSample', 'updatedAt']) &&
+        data.id == entryId &&
+        data.uid == userId &&
+        data.date is string && data.date.size() >= 4 && data.date.size() <= 32 &&
+        data.mood in ['Serene', 'Grateful', 'Focused', 'Tired', 'Overwhelmed', 'Hopeful', 'Loved'] &&
+        data.gratitudePrompt is string && data.gratitudePrompt.size() <= 500 &&
+        data.gratitudeAnswer is string && data.gratitudeAnswer.size() <= 5000 &&
+        data.achievement is string && data.achievement.size() <= 2000 &&
+        data.dailyNote is string && data.dailyNote.size() <= 10000 &&
+        (!('isSample' in data) || data.isSample is bool) &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidOpenWhenLetter(data, letterId) {
+      return data.keys().hasAll(['id', 'authorUid', 'occasion', 'subtitle', 'content', 'dateLabel', 'isSample', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'authorUid', 'occasion', 'subtitle', 'content', 'dateLabel', 'isSample', 'updatedAt']) &&
+        data.id == letterId &&
+        data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128 &&
+        data.occasion is string && data.occasion.size() >= 1 && data.occasion.size() <= 300 &&
+        data.subtitle is string && data.subtitle.size() <= 300 &&
+        data.content is string && data.content.size() >= 1 && data.content.size() <= 20000 &&
+        data.dateLabel is string && data.dateLabel.size() <= 120 &&
+        data.isSample is bool &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidVoiceRecording(data, recId) {
+      return data.keys().hasAll(['id', 'authorUid', 'title', 'dateLabel', 'durationSeconds', 'transcriptNote', 'isSample', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'authorUid', 'title', 'dateLabel', 'durationSeconds', 'audioDataUrl', 'isBuiltInMelody', 'transcriptNote', 'isSample', 'updatedAt']) &&
+        data.id == recId &&
+        data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128 &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 300 &&
+        data.dateLabel is string && data.dateLabel.size() <= 120 &&
+        data.durationSeconds is number && data.durationSeconds >= 1 && data.durationSeconds <= 3600 &&
+        (!('audioDataUrl' in data) || (data.audioDataUrl is string && data.audioDataUrl.size() <= 950000)) &&
+        (!('isBuiltInMelody' in data) || data.isBuiltInMelody is bool) &&
+        data.transcriptNote is string && data.transcriptNote.size() <= 2000 &&
+        data.isSample is bool &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidMemoryPhoto(data, memoryId) {
+      return data.keys().hasAll(['id', 'authorUid', 'title', 'dateLabel', 'locationLabel', 'caption', 'imageUrl', 'isSample', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'authorUid', 'title', 'dateLabel', 'locationLabel', 'caption', 'imageUrl', 'isSample', 'updatedAt']) &&
+        data.id == memoryId &&
+        data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128 &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 300 &&
+        data.dateLabel is string && data.dateLabel.size() <= 120 &&
+        data.locationLabel is string && data.locationLabel.size() <= 200 &&
+        data.caption is string && data.caption.size() <= 5000 &&
+        data.imageUrl is string && data.imageUrl.size() >= 1 && data.imageUrl.size() <= 950000 &&
+        data.isSample is bool &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidLoveMessage(data, msgId) {
+      return data.keys().hasAll(['id', 'authorUid', 'text', 'category', 'isSample', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'authorUid', 'text', 'subtext', 'category', 'isSample', 'updatedAt']) &&
+        data.id == msgId &&
+        data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128 &&
+        data.text is string && data.text.size() >= 1 && data.text.size() <= 2000 &&
+        (!('subtext' in data) || (data.subtext is string && data.subtext.size() <= 1000)) &&
+        data.category in ['encouragement', 'pride', 'rest', 'unconditional', 'study-reward'] &&
+        data.isSample is bool &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidLovedQuality(data, qualityId) {
+      return data.keys().hasAll(['id', 'authorUid', 'title', 'detail', 'categoryLabel', 'isSample', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'authorUid', 'title', 'detail', 'categoryLabel', 'isSample', 'updatedAt']) &&
+        data.id == qualityId &&
+        data.authorUid is string && data.authorUid.size() >= 1 && data.authorUid.size() <= 128 &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 300 &&
+        data.detail is string && data.detail.size() >= 1 && data.detail.size() <= 5000 &&
+        data.categoryLabel is string && data.categoryLabel.size() >= 1 && data.categoryLabel.size() <= 120 &&
+        data.isSample is bool &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // 1. Singleton Access Configuration (PII restricted to authorized users)
+    match /config/access {
+      allow read: if isAuthorizedUser();
+      allow create: if isBootstrappedOwnerEmail() && !hasAccessDoc() && isValidAccessConfig(request.resource.data);
+      allow update: if isOwner() && isValidAccessConfig(request.resource.data);
+      allow delete: if false;
+    }
+
+    // 2. User Profiles & Role Registry
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isOwner());
+      allow create: if isAuthenticated() &&
+        isValidId(userId) &&
+        isValidUserProfile(request.resource.data, userId) && (
+          (request.auth.uid == userId && request.resource.data.role == 'rania' && isRania()) ||
+          (request.auth.uid == userId && request.resource.data.role == 'owner' && isOwner()) ||
+          isOwner()
+        );
+      allow update: if isAuthenticated() &&
+        isValidUserProfile(request.resource.data, userId) &&
+        request.resource.data.createdAt == resource.data.createdAt && (
+          (request.auth.uid == userId && request.resource.data.role == resource.data.role && isAuthorizedUser()) ||
+          isOwner()
+        );
+      allow delete: if isOwner();
+
+      // 2a. Private User Settings
+      match /settings/{settingId} {
+        allow read: if isSelf(userId);
+        allow create, update: if isSelf(userId) &&
+          isValidId(settingId) &&
+          isValidUserSettings(request.resource.data, userId);
+        allow delete: if isSelf(userId);
+      }
+
+      // 2b. Private Study Topics
+      match /studyTopics/{topicId} {
+        allow read: if isSelf(userId);
+        allow create, update: if isSelf(userId) &&
+          isValidId(topicId) &&
+          isValidStudyTopic(request.resource.data, userId, topicId);
+        allow delete: if isSelf(userId);
+      }
+
+      // 2c. Private Cardiology Flashcards
+      match /flashcards/{cardId} {
+        allow read: if isSelf(userId);
+        allow create, update: if isSelf(userId) &&
+          isValidId(cardId) &&
+          isValidFlashcard(request.resource.data, userId, cardId);
+        allow delete: if isSelf(userId);
+      }
+
+      // 2d. Private Cardiology Quiz Questions
+      match /quizQuestions/{quizId} {
+        allow read: if isSelf(userId);
+        allow create, update: if isSelf(userId) &&
+          isValidId(quizId) &&
+          isValidQuizQuestion(request.resource.data, userId, quizId);
+        allow delete: if isSelf(userId);
+      }
+
+      // 2e. Private ECG Wave Notes
+      match /ecgNotes/{noteId} {
+        allow read: if isSelf(userId);
+        allow create, update: if isSelf(userId) &&
+          isValidEcgNote(request.resource.data, userId, noteId);
+        allow delete: if isSelf(userId);
+      }
+
+      // 2f. Private Little Garden Journal Entries
+      match /journalEntries/{entryId} {
+        allow read: if isSelf(userId);
+        allow create, update: if isSelf(userId) &&
+          isValidId(entryId) &&
+          isValidJournalEntry(request.resource.data, userId, entryId);
+        allow delete: if isSelf(userId);
+      }
+    }
+
+    // 3. Shared Open-When Love Letters (Owner writes, Owner + Rania read)
+    match /letters/{letterId} {
+      allow read: if isAuthorizedUser();
+      allow create, update: if isOwner() &&
+        isValidId(letterId) &&
+        isValidOpenWhenLetter(request.resource.data, letterId);
+      allow delete: if isOwner();
+    }
+
+    // 4. Shared Voice Recordings (Owner writes, Owner + Rania read)
+    match /voiceRecordings/{recId} {
+      allow read: if isAuthorizedUser();
+      allow create, update: if isOwner() &&
+        isValidId(recId) &&
+        isValidVoiceRecording(request.resource.data, recId);
+      allow delete: if isOwner();
+    }
+
+    // 5. Shared Memory Photos (Owner writes, Owner + Rania read)
+    match /memories/{memoryId} {
+      allow read: if isAuthorizedUser();
+      allow create, update: if isOwner() &&
+        isValidId(memoryId) &&
+        isValidMemoryPhoto(request.resource.data, memoryId);
+      allow delete: if isOwner();
+    }
+
+    // 6. Shared Random Love Messages & Study Goal Surprises (Owner writes, Owner + Rania read)
+    match /loveMessages/{msgId} {
+      allow read: if isAuthorizedUser();
+      allow create, update: if isOwner() &&
+        isValidId(msgId) &&
+        isValidLoveMessage(request.resource.data, msgId);
+      allow delete: if isOwner();
+    }
+
+    // 7. Shared "Things I Love About You" Tributes (Owner writes, Owner + Rania read)
+    match /thingsILove/{qualityId} {
+      allow read: if isAuthorizedUser();
+      allow create, update: if isOwner() &&
+        isValidId(qualityId) &&
+        isValidLovedQuality(request.resource.data, qualityId);
+      allow delete: if isOwner();
+    }
+  }
+}

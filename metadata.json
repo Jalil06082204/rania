@@ -1,0 +1,6 @@
+{
+  "name": "Her Little Heart",
+  "description": "A personal medical study companion, self-care sanctuary, and romantic digital universe crafted for Rania.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

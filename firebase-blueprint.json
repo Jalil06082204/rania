@@ -1,0 +1,291 @@
+{
+  "entities": {
+    "AccessConfig": {
+      "title": "AccessConfig",
+      "description": "Private access control configuration defining the authorized Owner and Rania accounts.",
+      "type": "object",
+      "properties": {
+        "ownerEmail": { "type": "string", "description": "Authorized email address of the Owner" },
+        "ownerUid": { "type": "string", "description": "Authorized UID of the Owner" },
+        "raniaEmail": { "type": "string", "description": "Authorized email address for Rania" },
+        "raniaUid": { "type": "string", "description": "Optional UID for Rania once signed in" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last updated timestamp" }
+      },
+      "required": ["ownerEmail", "ownerUid", "raniaEmail", "updatedAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile and assigned role ('owner' or 'rania').",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["owner", "rania"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "role", "createdAt", "updatedAt"]
+    },
+    "UserSettings": {
+      "title": "UserSettings",
+      "description": "Authenticated user's private preferences, timer settings, affirmation, custom hug message, and hydration state.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "recipientName": { "type": "string" },
+        "language": { "type": "string", "enum": ["en", "fr"] },
+        "dailyAffirmation": { "type": "string" },
+        "dailyRestReminder": { "type": "string" },
+        "focusMinutes": { "type": "number" },
+        "shortBreakMinutes": { "type": "number" },
+        "longBreakMinutes": { "type": "number" },
+        "soundEnabled": { "type": "boolean" },
+        "completedPomodoroSessions": { "type": "number" },
+        "hydrationCountToday": { "type": "number" },
+        "customHugMessage": { "type": "string" },
+        "customHugSubtext": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "uid",
+        "recipientName",
+        "language",
+        "dailyAffirmation",
+        "dailyRestReminder",
+        "focusMinutes",
+        "shortBreakMinutes",
+        "longBreakMinutes",
+        "soundEnabled",
+        "completedPomodoroSessions",
+        "hydrationCountToday",
+        "updatedAt"
+      ]
+    },
+    "StudyTopic": {
+      "title": "StudyTopic",
+      "description": "Medical study topic in the authenticated user's private planner.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "title": { "type": "string" },
+        "module": { "type": "string" },
+        "priority": { "type": "string", "enum": ["High", "Medium", "Gentle"] },
+        "dueDate": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "notes": { "type": "string" },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "uid", "title", "module", "priority", "dueDate", "completed", "updatedAt"]
+    },
+    "CardioFlashcard": {
+      "title": "CardioFlashcard",
+      "description": "Cardiology flashcard stored in the authenticated user's private study deck.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "category": { "type": "string" },
+        "question": { "type": "string" },
+        "answer": { "type": "string" },
+        "lectureRef": { "type": "string" },
+        "mastered": { "type": "boolean" },
+        "reviewStatus": { "type": "string", "enum": ["unseen", "understood", "needs_revision"] },
+        "lastReviewedDate": { "type": "string" },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "uid", "category", "question", "answer", "lectureRef", "mastered", "isSample", "updatedAt"]
+    },
+    "CardioQuizQuestion": {
+      "title": "CardioQuizQuestion",
+      "description": "Cardiology multiple-choice question in the authenticated user's private bank.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "category": { "type": "string" },
+        "question": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "correctIndex": { "type": "number" },
+        "correctIndices": { "type": "array", "items": { "type": "number" } },
+        "isMultipleChoice": { "type": "boolean" },
+        "explanation": { "type": "string" },
+        "lectureRef": { "type": "string" },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "uid", "category", "question", "options", "correctIndex", "explanation", "lectureRef", "isSample", "updatedAt"]
+    },
+    "EcgWaveNote": {
+      "title": "EcgWaveNote",
+      "description": "Personal ECG wave study note in the authenticated user's private collection.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "enum": ["P", "PR", "QRS", "ST", "T"] },
+        "uid": { "type": "string" },
+        "label": { "type": "string" },
+        "title": { "type": "string" },
+        "educationalConcept": { "type": "string" },
+        "personalNote": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "uid", "label", "title", "educationalConcept", "personalNote", "updatedAt"]
+    },
+    "JournalEntry": {
+      "title": "JournalEntry",
+      "description": "Personal reflection entry in Rania's private Little Garden journal.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "date": { "type": "string" },
+        "mood": { "type": "string" },
+        "gratitudePrompt": { "type": "string" },
+        "gratitudeAnswer": { "type": "string" },
+        "achievement": { "type": "string" },
+        "dailyNote": { "type": "string" },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "uid", "date", "mood", "gratitudePrompt", "gratitudeAnswer", "achievement", "dailyNote", "updatedAt"]
+    },
+    "OpenWhenLetter": {
+      "title": "OpenWhenLetter",
+      "description": "Romantic Open-When letter managed by the Owner and readable by Rania.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "occasion": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "content": { "type": "string" },
+        "dateLabel": { "type": "string" },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorUid", "occasion", "subtitle", "content", "dateLabel", "isSample", "updatedAt"]
+    },
+    "VoiceRecording": {
+      "title": "VoiceRecording",
+      "description": "Audio voice note or melody managed by the Owner and playable by Rania.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "title": { "type": "string" },
+        "dateLabel": { "type": "string" },
+        "durationSeconds": { "type": "number" },
+        "audioDataUrl": { "type": "string" },
+        "isBuiltInMelody": { "type": "boolean" },
+        "transcriptNote": { "type": "string" },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorUid", "title", "dateLabel", "durationSeconds", "transcriptNote", "isSample", "updatedAt"]
+    },
+    "MemoryPhoto": {
+      "title": "MemoryPhoto",
+      "description": "Protected memory photo and caption managed by the Owner and viewable by Rania.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "title": { "type": "string" },
+        "dateLabel": { "type": "string" },
+        "locationLabel": { "type": "string" },
+        "caption": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorUid", "title", "dateLabel", "locationLabel", "caption", "imageUrl", "isSample", "updatedAt"]
+    },
+    "LoveMessage": {
+      "title": "LoveMessage",
+      "description": "Editable random love note or study goal surprise message written by the Owner for Rania.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "text": { "type": "string" },
+        "subtext": { "type": "string" },
+        "category": { "type": "string", "enum": ["encouragement", "pride", "rest", "unconditional", "study-reward"] },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorUid", "text", "category", "isSample", "updatedAt"]
+    },
+    "LovedQuality": {
+      "title": "LovedQuality",
+      "description": "Editable entry on the 'Things I Love About You' page managed by the Owner and readable by Rania.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "title": { "type": "string" },
+        "detail": { "type": "string" },
+        "categoryLabel": { "type": "string" },
+        "isSample": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorUid", "title", "detail", "categoryLabel", "isSample", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/config/access": {
+      "schema": { "$ref": "#/entities/AccessConfig" },
+      "description": "Singleton access control configuration managed by the Owner."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Authorized user profile and role assignment."
+    },
+    "/users/{userId}/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/UserSettings" },
+      "description": "User's private preferences and Pomodoro/hydration progress."
+    },
+    "/users/{userId}/studyTopics/{topicId}": {
+      "schema": { "$ref": "#/entities/StudyTopic" },
+      "description": "User's private study planner topics."
+    },
+    "/users/{userId}/flashcards/{cardId}": {
+      "schema": { "$ref": "#/entities/CardioFlashcard" },
+      "description": "User's private Cardiology flashcards."
+    },
+    "/users/{userId}/quizQuestions/{quizId}": {
+      "schema": { "$ref": "#/entities/CardioQuizQuestion" },
+      "description": "User's private Cardiology quiz questions."
+    },
+    "/users/{userId}/ecgNotes/{noteId}": {
+      "schema": { "$ref": "#/entities/EcgWaveNote" },
+      "description": "User's private ECG wave personal study notes."
+    },
+    "/users/{userId}/journalEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/JournalEntry" },
+      "description": "User's private Little Garden journal entries."
+    },
+    "/letters/{letterId}": {
+      "schema": { "$ref": "#/entities/OpenWhenLetter" },
+      "description": "Shared Open-When love letters written by the Owner for Rania."
+    },
+    "/voiceRecordings/{recId}": {
+      "schema": { "$ref": "#/entities/VoiceRecording" },
+      "description": "Shared voice messages uploaded/recorded by the Owner for Rania."
+    },
+    "/memories/{memoryId}": {
+      "schema": { "$ref": "#/entities/MemoryPhoto" },
+      "description": "Shared memory gallery photos uploaded by the Owner for Rania."
+    },
+    "/loveMessages/{msgId}": {
+      "schema": { "$ref": "#/entities/LoveMessage" },
+      "description": "Shared random love notes and study completion surprise messages written by the Owner for Rania."
+    },
+    "/thingsILove/{qualityId}": {
+      "schema": { "$ref": "#/entities/LovedQuality" },
+      "description": "Shared 'Things I Love About You' tributes written by the Owner for Rania."
+    }
+  }
+}
