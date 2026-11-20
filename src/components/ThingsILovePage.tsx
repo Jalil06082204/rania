@@ -132,7 +132,7 @@ export const ThingsILovePage: React.FC<ThingsILovePageProps> = ({
       </div>
 
       {/* Editorial Hero Header */}
-      <section className="relative rounded-[2.25rem] editorial-stationary p-8 sm:p-14 text-center overflow-hidden">
+      <section className="relative rounded-[2.25rem] editorial-stationary rose-glass-sheen p-8 sm:p-14 text-center overflow-hidden">
         <FloralCornerFlourish className="hidden sm:block absolute top-5 left-5 w-16 h-16 pointer-events-none" />
         <FloralCornerFlourish className="hidden sm:block absolute top-5 right-5 w-16 h-16 -scale-x-100 pointer-events-none" />
 
@@ -160,7 +160,7 @@ export const ThingsILovePage: React.FC<ThingsILovePageProps> = ({
       {isModalOpen && (
         <form
           onSubmit={handleSave}
-          className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 sm:p-8 space-y-5"
+          className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 sm:p-8 space-y-5"
         >
           <div className="flex items-center justify-between pb-4 border-b border-[#EAE0D8]">
             <h2 className="font-serif-editorial text-2xl text-[#51434A]">
@@ -241,7 +241,7 @@ export const ThingsILovePage: React.FC<ThingsILovePageProps> = ({
 
       {/* Editorial Monograph Grid */}
       {localizedItems.length === 0 ? (
-        <section className="rounded-3xl editorial-card p-12 text-center space-y-4">
+        <section className="rounded-3xl editorial-card rose-glass-sheen p-12 text-center space-y-4">
           <Sparkles className="w-8 h-8 text-[#C97A92] mx-auto" />
           <div className="space-y-1 max-w-md mx-auto">
             <h2 className="font-serif-editorial text-2xl text-[#51434A]">
@@ -276,7 +276,7 @@ export const ThingsILovePage: React.FC<ThingsILovePageProps> = ({
           {localizedItems.map((item, idx) => (
             <article
               key={item.id}
-              className="rounded-3xl editorial-card editorial-card-interactive p-7 sm:p-9 flex flex-col justify-between space-y-6"
+              className="rounded-3xl editorial-card editorial-card-interactive rose-glass-sheen p-7 sm:p-9 flex flex-col justify-between space-y-6"
             >
               <div className="space-y-3.5">
                 <div className="flex items-center justify-between gap-2 text-xs text-[#7D6B74]">

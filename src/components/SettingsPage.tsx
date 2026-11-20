@@ -112,7 +112,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       )}
 
       {/* Privacy & Server-Side Protection Notice */}
-      <section className="rounded-2xl bg-[#F3E9DD]/65 border border-[#EAE0D8] p-6 flex items-start gap-4">
+      <section className="rounded-3xl rose-glass-cream rose-glass-sheen p-6 flex items-start gap-4">
         <ShieldCheck className="w-5 h-5 text-[#C97A92] shrink-0 mt-0.5" />
         <div className="space-y-1 text-xs text-[#51434A] leading-relaxed">
           <h2 className="font-semibold text-sm">{t.settings.securityTitle}</h2>
@@ -121,7 +121,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </section>
 
       {/* Localization / Language Selector */}
-      <section className="rounded-2xl bg-white border border-[#EAE0D8] p-6 sm:p-8 space-y-4">
+      <section className="rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-4">
         <div className="flex items-center gap-2">
           <Globe className="w-4 h-4 text-[#C97A92]" />
           <h2 className="font-serif-editorial text-xl font-normal text-[#51434A]">
@@ -159,7 +159,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       {/* General & Pomodoro Timer Preferences */}
       <form
         onSubmit={handleSavePreferences}
-        className="rounded-2xl bg-white border border-[#EAE0D8] p-6 sm:p-8 space-y-6"
+        className="rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-6"
       >
         <div className="flex items-center gap-2 pb-3 border-b border-[#EAE0D8]">
           <Sliders className="w-4 h-4 text-[#C97A92]" />
@@ -237,7 +237,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </form>
 
       {/* Data Backup & Reset Section */}
-      <section className="rounded-2xl bg-white border border-[#EAE0D8] p-6 sm:p-8 space-y-6">
+      <section className="rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-6">
         <div>
           <h2 className="font-serif-editorial text-xl font-normal text-[#51434A]">
             {t.settings.backupHeading}

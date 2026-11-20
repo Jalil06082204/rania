@@ -186,8 +186,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
       {/* Daily Affirmation & Gentle Daily Reminder to Rest */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* Daily Editable Affirmation (7 cols) - Stationery Card */}
-        <div className="lg:col-span-7 rounded-3xl editorial-stationary p-7 sm:p-9 flex flex-col justify-between">
+        {/* Daily Editable Affirmation (7 cols) - Stationery Glass Card */}
+        <div className="lg:col-span-7 rounded-3xl editorial-stationary rose-glass-sheen p-7 sm:p-9 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-4 mb-5">
               <div className="flex items-center gap-2 text-xs text-[#7D6B74]">
@@ -251,8 +251,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           </div>
         </div>
 
-        {/* Gentle Daily Reminder to Rest (5 cols) - Warm Cream Surface */}
-        <div className="lg:col-span-5 rounded-3xl bg-[#F3E9DD]/60 border border-[#EAE0D8] p-7 sm:p-9 flex flex-col justify-between">
+        {/* Gentle Daily Reminder to Rest (5 cols) - Warm Cream Glass Surface */}
+        <div className="lg:col-span-5 rounded-3xl rose-glass-cream rose-glass-sheen p-7 sm:p-9 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-4 mb-5">
               <div className="flex items-center gap-2 text-xs text-[#7D6B74]">
@@ -331,7 +331,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       {/* Today's Study Goals & Real Study Progress Indicator */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Today's Study Goals (7 cols) */}
-        <div className="lg:col-span-7 rounded-3xl editorial-card p-6 sm:p-8">
+        <div className="lg:col-span-7 rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[#EAE0D8]">
             <div>
               <p className="text-xs text-[#7D6B74] mb-1">
@@ -457,7 +457,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         {/* Real Study Progress & Featured Love Note (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Honest Progress Indicator Card */}
-          <div className="rounded-3xl editorial-card p-6 sm:p-8 space-y-5">
+          <div className="rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-5">
             <div className="flex items-baseline justify-between">
               <div>
                 <p className="text-xs text-[#7D6B74] mb-0.5">
@@ -501,9 +501,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             </div>
           </div>
 
-          {/* Featured Love Note - Postcard Style */}
+          {/* Featured Love Note - Postcard Glass Style */}
           {featuredLetter && (
-            <div className="rounded-3xl bg-[#FFF9F6] border border-[#E8A2B5]/60 p-6 sm:p-8 space-y-4 shadow-2xs">
+            <div className="rounded-3xl editorial-stationary rose-glass-sheen p-6 sm:p-8 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-xs text-[#7D6B74]">
                   <WaxSealHeart className="w-6 h-6" />
@@ -606,7 +606,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
               <button
                 key={card.id}
                 onClick={() => onNavigate(card.id)}
-                className="text-left rounded-2xl editorial-card editorial-card-interactive p-6 flex flex-col justify-between min-h-[164px] group cursor-pointer"
+                className="text-left rounded-2xl editorial-card editorial-card-interactive rose-glass-sheen p-6 flex flex-col justify-between min-h-[164px] group cursor-pointer"
               >
                 <div className="flex items-center justify-between w-full">
                   <span className="font-serif-editorial italic text-sm text-[#C97A92]">

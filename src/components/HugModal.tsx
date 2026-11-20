@@ -54,7 +54,7 @@ export const HugModal: React.FC<HugModalProps> = ({
       aria-modal="true"
       aria-labelledby="hug-modal-title"
     >
-      <div className="relative w-full max-w-lg rounded-3xl bg-[#FFF9F6] border border-[#EAE0D8] p-8 md:p-10 text-center shadow-xl overflow-hidden">
+      <div className="relative w-full max-w-lg rounded-3xl editorial-stationary rose-glass-sheen p-8 md:p-10 text-center overflow-hidden">
         {/* Close button */}
         <button
           onClick={() => {

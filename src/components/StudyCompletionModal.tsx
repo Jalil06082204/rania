@@ -83,7 +83,7 @@ export const StudyCompletionModal: React.FC<StudyCompletionModalProps> = ({
       aria-modal="true"
       aria-labelledby="study-surprise-title"
     >
-      <div className="relative w-full max-w-lg rounded-3xl bg-[#FFF9F6] border border-[#E8A2B5] p-7 sm:p-10 text-center shadow-xl overflow-hidden">
+      <div className="relative w-full max-w-lg rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-7 sm:p-10 text-center overflow-hidden">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 min-h-[42px] min-w-[42px] flex items-center justify-center rounded-full text-[#7D6B74] hover:text-[#51434A] hover:bg-[#F4DDE3]/50 transition-colors cursor-pointer"

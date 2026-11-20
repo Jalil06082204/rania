@@ -33,6 +33,7 @@ import {
   StudyTopic,
   VoiceRecording,
 } from './types';
+import { AmbientAurora, AmbientAuroraMode } from './components/AmbientAurora';
 import { WaxSealHeart } from './components/BotanicalOrnaments';
 import { CardioAcademy } from './components/CardioAcademy';
 import { FocusRelax } from './components/FocusRelax';
@@ -153,6 +154,9 @@ export default function App() {
   const [completedGoalSurpriseTitle, setCompletedGoalSurpriseTitle] = useState<
     string | null
   >(null);
+  const [focusAmbientMode, setFocusAmbientMode] = useState<'focus' | 'rest'>(
+    'focus'
+  );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const hasHydratedFromServerRef = useRef<boolean>(false);
 
@@ -722,19 +726,27 @@ export default function App() {
     { id: 'letters', label: t.nav.lettersShort, icon: Mail },
   ];
 
-  return (
-    <div className="min-h-screen w-full bg-[#FFF9F6] text-[#51434A] flex flex-col lg:flex-row relative overflow-x-hidden">
-      {/* Subtle Ambient Background Gradient */}
-      <div
-        className="pointer-events-none fixed -top-48 right-0 w-[30rem] h-[30rem] rounded-full bg-gradient-to-bl from-[#F4DDE3]/35 via-[#F3E9DD]/25 to-transparent blur-3xl z-0"
-        aria-hidden="true"
-      />
+  const ambientMode: AmbientAuroraMode =
+    activeSection === 'study' || activeSection === 'cardio'
+      ? 'focus'
+      : activeSection === 'focus'
+      ? focusAmbientMode
+      : activeSection === 'letters' ||
+        activeSection === 'things-i-love' ||
+        activeSection === 'garden'
+      ? 'rest'
+      : 'sanctuary';
 
-      {/* Desktop Editorial Sidebar Navigation */}
-      <aside className="hidden lg:flex lg:w-68 lg:flex-col lg:fixed lg:inset-y-0 bg-[#FFFDFB] border-r border-[#EAE0D8] z-30 justify-between p-7">
+  return (
+    <div className="min-h-screen w-full bg-transparent text-[#51434A] flex flex-col lg:flex-row relative overflow-x-hidden">
+      {/* Living Ambient Rose-Petal & Champagne-Cream Aurora Backdrop */}
+      <AmbientAurora mode={ambientMode} />
+
+      {/* Desktop Editorial Rose-Quartz Glass Sidebar Navigation */}
+      <aside className="hidden lg:flex lg:w-68 lg:flex-col lg:fixed lg:inset-y-0 rose-glass-chrome border-r border-white/65 z-30 justify-between p-7">
         <div className="space-y-8">
           {/* Brand Lockup */}
-          <div className="flex items-center gap-3 pb-5 border-b border-[#EAE0D8]">
+          <div className="flex items-center gap-3 pb-5 border-b border-[#EAE0D8]/80">
             <WaxSealHeart className="w-9 h-9 shrink-0" />
             <div>
               <button
@@ -781,7 +793,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => handleNavigate('welcome')}
-              className="flex-1 min-h-[40px] px-3 py-2 rounded-xl border border-[#EAE0D8] bg-[#FFF9F6] text-xs font-medium text-[#51434A] hover:bg-[#F3E9DD]/60 transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+              className="flex-1 min-h-[40px] px-3 py-2 rounded-xl border border-white/70 bg-white/55 text-xs font-medium text-[#51434A] hover:bg-[#F3E9DD]/65 transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#C97A92]" />
               <span>{t.nav.welcome}</span>
@@ -789,7 +801,7 @@ export default function App() {
 
             <button
               onClick={handleLockSanctuary}
-              className="min-h-[40px] px-3 py-2 rounded-xl border border-[#EAE0D8] bg-white hover:bg-[#FFF9F6] text-xs font-medium text-[#7D6B74] hover:text-[#51434A] transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+              className="min-h-[40px] px-3 py-2 rounded-xl border border-white/70 bg-white/65 hover:bg-white/85 text-xs font-medium text-[#7D6B74] hover:text-[#51434A] transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
               title={t.nav.lockSanctuary}
             >
               <Lock className="w-3.5 h-3.5 text-[#C97A92]" />
@@ -809,7 +821,7 @@ export default function App() {
       {/* Main Content Area Wrapper */}
       <div className="relative z-10 flex-1 lg:pl-68 flex flex-col min-h-screen">
         {/* Top Bar Contract: 3 Zones separated by gap-8 */}
-        <header className="sticky top-0 z-20 h-14 bg-[#FFF9F6]/90 backdrop-blur-md border-b border-[#EAE0D8] px-4 sm:px-8 flex items-center justify-between gap-4 sm:gap-8">
+        <header className="sticky top-0 z-20 h-14 rose-glass-chrome border-b border-white/65 px-4 sm:px-8 flex items-center justify-between gap-4 sm:gap-8">
           {/* Zone 1: Single text element wordmark */}
           <button
             onClick={() => handleNavigate('home')}
@@ -977,6 +989,7 @@ export default function App() {
               settings={settings}
               onUpdateSettings={updateSettings}
               onNotify={showToast}
+              onAmbientModeChange={setFocusAmbientMode}
             />
           )}
 
@@ -1055,7 +1068,7 @@ export default function App() {
 
       {/* Mobile Compact Bottom Navigation Bar */}
       <nav
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-30 h-16 bg-white/95 backdrop-blur-md border-t border-[#EAE0D8] grid grid-cols-5 items-center px-1.5"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-30 h-16 rose-glass-chrome border-t border-white/65 grid grid-cols-5 items-center px-1.5"
         aria-label="Mobile Bottom Navigation"
       >
         {mobileBottomItems.map((item) => {

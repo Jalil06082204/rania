@@ -209,7 +209,7 @@ export const StudySpace: React.FC<StudySpaceProps> = ({
       {/* Progress Overview & Weekly 7-Day Strip */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Progress Summary */}
-        <div className="lg:col-span-5 rounded-3xl bg-[#F3E9DD]/55 border border-[#EAE0D8] p-6 sm:p-8 flex flex-col justify-between space-y-5">
+        <div className="lg:col-span-5 rounded-3xl rose-glass-cream rose-glass-sheen p-6 sm:p-8 flex flex-col justify-between space-y-5">
           <div className="flex items-baseline justify-between">
             <div>
               <p className="text-xs text-[#7D6B74] mb-1">
@@ -248,7 +248,7 @@ export const StudySpace: React.FC<StudySpaceProps> = ({
         </div>
 
         {/* 7-Day Weekly Overview */}
-        <div className="lg:col-span-7 rounded-3xl editorial-card p-6 sm:p-8 flex flex-col justify-between">
+        <div className="lg:col-span-7 rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 flex flex-col justify-between">
           <div className="flex items-center justify-between gap-2 mb-4">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-[#C97A92]" />
@@ -312,7 +312,7 @@ export const StudySpace: React.FC<StudySpaceProps> = ({
 
       {/* Add / Edit Topic Form Drawer */}
       {isFormOpen && (
-        <section className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 sm:p-8">
+        <section className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 sm:p-8">
           <div className="flex items-center justify-between pb-4 mb-6 border-b border-[#EAE0D8]">
             <h2 className="font-serif-editorial text-2xl font-normal text-[#51434A]">
               {editingId
@@ -435,7 +435,7 @@ export const StudySpace: React.FC<StudySpaceProps> = ({
       {/* Interactive Filter Controls & Search Bar */}
       <section className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Segmented Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#F3E9DD]/70 rounded-2xl">
+        <div className="flex flex-wrap items-center gap-1.5 p-1.5 rose-glass-cream rounded-2xl">
           {(
             [
               { id: 'all', label: t.study.filterAll },
@@ -460,7 +460,7 @@ export const StudySpace: React.FC<StudySpaceProps> = ({
 
         {/* Priority Filter & Search */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="flex flex-wrap items-center gap-1 p-1.5 bg-[#F3E9DD]/70 rounded-2xl">
+          <div className="flex flex-wrap items-center gap-1 p-1.5 rose-glass-cream rounded-2xl">
             {(['All', 'High', 'Medium', 'Gentle'] as const).map((p) => (
               <button
                 key={p}
@@ -490,7 +490,7 @@ export const StudySpace: React.FC<StudySpaceProps> = ({
       </section>
 
       {/* Study Topic List or Beautiful Empty State */}
-      <section className="rounded-3xl editorial-card overflow-hidden">
+      <section className="rounded-3xl editorial-card rose-glass-sheen overflow-hidden">
         {filteredTopics.length === 0 ? (
           <div className="p-12 sm:p-16 text-center space-y-4">
             <div className="w-14 h-14 rounded-2xl bg-[#FFF9F6] border border-[#EAE0D8] flex items-center justify-center mx-auto">

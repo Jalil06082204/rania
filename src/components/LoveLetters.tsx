@@ -699,7 +699,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
       </section>
 
       {/* PART 0: Random Love Message Spotlight & Editable Collection */}
-      <section className="relative rounded-[2.25rem] editorial-stationary p-7 sm:p-11 overflow-hidden">
+      <section className="relative rounded-[2.25rem] editorial-stationary rose-glass-sheen p-7 sm:p-11 overflow-hidden">
         <FloralCornerFlourish className="hidden sm:block absolute top-4 left-4 w-14 h-14 pointer-events-none" />
         <FloralCornerFlourish className="hidden sm:block absolute top-4 right-4 w-14 h-14 -scale-x-100 pointer-events-none" />
 
@@ -719,7 +719,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
           {activeLoveMessage && (
             <div
               key={activeLoveMessage.id}
-              className="rounded-2xl bg-[#FFF9F6] border border-[#EAE0D8] px-6 py-8 sm:px-10 sm:py-9 space-y-3 animate-page-enter"
+              className="rounded-2xl rose-glass-cream px-6 py-8 sm:px-10 sm:py-9 space-y-3 animate-page-enter"
             >
               <p className="font-serif-editorial italic text-xl sm:text-3xl text-[#51434A] leading-relaxed">
                 “{activeLoveMessage.text}”
@@ -770,7 +770,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
             <div className="pt-6 border-t border-[#EAE0D8] text-left space-y-5 animate-page-enter">
               <form
                 onSubmit={handleSaveLoveNote}
-                className="rounded-2xl bg-white border border-[#EAE0D8] p-5 space-y-4"
+                className="rounded-2xl rose-glass-cream p-5 space-y-4"
               >
                 <div className="flex items-center justify-between">
                   <h3 className="font-serif-editorial text-lg text-[#51434A]">
@@ -853,7 +853,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
                 {localizedLoveMessages.map((msg, i) => (
                   <div
                     key={msg.id}
-                    className="p-3.5 rounded-xl bg-white border border-[#EAE0D8] flex items-start justify-between gap-3"
+                    className="p-3.5 rounded-xl bg-white/75 backdrop-blur-xs border border-[#EAE0D8] flex items-start justify-between gap-3"
                   >
                     <button
                       type="button"
@@ -897,7 +897,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
       {isLetterModalOpen && (
         <form
           onSubmit={handleSaveLetter}
-          className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 sm:p-8 space-y-5"
+          className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 sm:p-8 space-y-5"
         >
           <div className="flex items-center justify-between pb-4 border-b border-[#EAE0D8]">
             <h2 className="font-serif-editorial text-2xl text-[#51434A]">
@@ -978,7 +978,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
 
       {/* PART 1: 10 "Open When..." Envelopes & Interactive Envelope-Opening Stage */}
       {localizedLetters.length === 0 ? (
-        <section className="rounded-3xl editorial-card p-12 text-center space-y-4">
+        <section className="rounded-3xl editorial-card rose-glass-sheen p-12 text-center space-y-4">
           <Mail className="w-8 h-8 text-[#C97A92] mx-auto" />
           <div className="space-y-1 max-w-md mx-auto">
             <h2 className="font-serif-editorial text-2xl text-[#51434A]">
@@ -1044,10 +1044,10 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
                   <button
                     key={letter.id}
                     onClick={() => handleSelectEnvelope(letter.id)}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all flex items-start gap-3.5 cursor-pointer ${
+                    className={`w-full text-left p-4 sm:p-5 rounded-2xl transition-all flex items-start gap-3.5 cursor-pointer ${
                       isSelected
-                        ? 'bg-[#51434A] text-[#FFF9F6] border-[#51434A] shadow-sm'
-                        : 'bg-white text-[#51434A] border-[#EAE0D8] hover:border-[#E8A2B5]'
+                        ? 'bg-[#51434A] text-[#FFF9F6] border border-[#51434A] shadow-sm'
+                        : 'editorial-card editorial-card-interactive rose-glass-sheen text-[#51434A]'
                     }`}
                   >
                     <div className="pt-0.5 shrink-0">
@@ -1084,7 +1084,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
           {/* Right: Interactive Envelope-Opening Animation & Stationery Reader (7 cols) */}
           <div className="lg:col-span-7 space-y-5">
             {activeLetter ? (
-              <div className="rounded-[2rem] bg-[#F3E9DD]/65 p-4 sm:p-6 border border-[#EAE0D8] space-y-5">
+              <div className="rounded-[2rem] rose-glass-cream rose-glass-sheen p-4 sm:p-6 space-y-5">
                 {/* Interactive Fine Linen Envelope Stage */}
                 <div className="envelope-stage relative mx-auto max-w-xl">
                   <div className="relative rounded-2xl bg-gradient-to-b from-[#FAF3EC] to-[#F3E9DD] border border-[#E5D6C8] shadow-sm overflow-hidden">
@@ -1163,7 +1163,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
                 {/* Unfolded Stationery Letter Sheet */}
                 <article
                   key={`${activeLetter.id}-${isEnvelopeOpen ? 'open' : 'sealed'}`}
-                  className={`rounded-[1.5rem] editorial-stationary p-7 sm:p-11 space-y-7 envelope-letter-rise ${
+                  className={`rounded-[1.5rem] editorial-stationary rose-glass-sheen p-7 sm:p-11 space-y-7 envelope-letter-rise ${
                     isEnvelopeOpen
                       ? 'translate-y-0 opacity-100'
                       : 'translate-y-1 opacity-95'
@@ -1220,7 +1220,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
       )}
 
       {/* PART 2: Dedicated Callout for "Things I Love About You" Page */}
-      <section className="rounded-3xl editorial-card p-7 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <section className="rounded-3xl editorial-card editorial-card-interactive rose-glass-sheen p-7 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
           <div className="flex items-center gap-2 text-xs text-[#C97A92] font-medium">
             <Heart className="w-4 h-4 fill-[#F4DDE3]" />
@@ -1246,7 +1246,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
       </section>
 
       {/* PART 3: Personal Audio Player for Voice Recordings */}
-      <section className="rounded-3xl editorial-card p-6 sm:p-9 space-y-6">
+      <section className="rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-9 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#EAE0D8]">
           <div>
             <div className="flex items-center gap-2 text-xs text-[#7D6B74] mb-1">
@@ -1496,7 +1496,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
         {isMemoryModalOpen && (
           <form
             onSubmit={handleSaveMemory}
-            className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 sm:p-8 space-y-4"
+            className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 sm:p-8 space-y-4"
           >
             <div className="flex items-center justify-between pb-3 border-b border-[#EAE0D8]">
               <h3 className="font-serif-editorial text-xl text-[#51434A]">
@@ -1614,7 +1614,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
 
         {/* Gallery Grid or Empty State */}
         {localizedMemories.length === 0 ? (
-          <div className="rounded-3xl editorial-card p-12 text-center space-y-4">
+          <div className="rounded-3xl editorial-card rose-glass-sheen p-12 text-center space-y-4">
             <Camera className="w-8 h-8 text-[#C97A92] mx-auto" />
             <div className="space-y-1 max-w-md mx-auto">
               <h3 className="font-serif-editorial text-2xl text-[#51434A]">
@@ -1649,7 +1649,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
             {localizedMemories.map((mem) => (
               <article
                 key={mem.id}
-                className="rounded-3xl editorial-card editorial-card-interactive p-3.5 flex flex-col justify-between group"
+                className="rounded-3xl editorial-card editorial-card-interactive rose-glass-sheen p-3.5 flex flex-col justify-between group"
               >
                 <div>
                   <button
@@ -1709,7 +1709,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
             role="dialog"
             aria-modal="true"
           >
-            <div className="relative max-w-2xl w-full rounded-3xl bg-white border border-[#EAE0D8] overflow-hidden shadow-xl p-3 sm:p-4">
+            <div className="relative max-w-2xl w-full rounded-3xl editorial-stationary overflow-hidden p-3 sm:p-4">
               <button
                 onClick={() => setLightboxMemory(null)}
                 className="absolute top-6 right-6 z-10 min-h-[44px] min-w-[44px] rounded-full bg-white/95 text-[#51434A] flex items-center justify-center shadow-xs"

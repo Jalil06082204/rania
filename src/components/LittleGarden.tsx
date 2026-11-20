@@ -191,7 +191,7 @@ export const LittleGarden: React.FC<LittleGardenProps> = ({
 
       {/* Journal Entry Composer / Editor */}
       {isFormOpen && (
-        <section className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 sm:p-8 space-y-6">
+        <section className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 sm:p-8 space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-[#EAE0D8]">
             <div>
               <h2 className="font-serif-editorial text-2xl font-normal text-[#51434A]">
@@ -350,7 +350,7 @@ export const LittleGarden: React.FC<LittleGardenProps> = ({
 
       {/* Filter by Mood & Search */}
       <section className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#F3E9DD]/75 rounded-2xl">
+        <div className="flex flex-wrap items-center gap-1.5 p-1.5 rose-glass-cream rounded-2xl">
           <button
             onClick={() => setMoodFilter('All')}
             className={`min-h-[38px] px-3.5 py-1 rounded-xl text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
@@ -390,7 +390,7 @@ export const LittleGarden: React.FC<LittleGardenProps> = ({
 
       {/* Journal Entries Feed */}
       {filteredEntries.length === 0 ? (
-        <section className="rounded-3xl editorial-card p-12 text-center space-y-4">
+        <section className="rounded-3xl editorial-card rose-glass-sheen p-12 text-center space-y-4">
           <div className="w-14 h-14 rounded-2xl bg-[#FFF9F6] border border-[#EAE0D8] flex items-center justify-center mx-auto">
             <Flower2 className="w-6 h-6 text-[#C97A92]" />
           </div>
@@ -429,7 +429,7 @@ export const LittleGarden: React.FC<LittleGardenProps> = ({
           {filteredEntries.map((entry) => (
             <article
               key={entry.id}
-              className="rounded-3xl editorial-card p-6 sm:p-8 flex flex-col justify-between space-y-5"
+              className="rounded-3xl editorial-card editorial-card-interactive rose-glass-sheen p-6 sm:p-8 flex flex-col justify-between space-y-5"
             >
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#7D6B74] pb-3 border-b border-[#EAE0D8]/80">

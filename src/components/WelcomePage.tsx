@@ -3,6 +3,7 @@ import { ArrowRight, Heart } from 'lucide-react';
 import { HERO_BOTANICAL_IMAGE } from '../data/initialData';
 import { translations } from '../i18n/translations';
 import { Language } from '../types';
+import { AmbientAurora } from './AmbientAurora';
 import { BotanicalSprig, WaxSealHeart } from './BotanicalOrnaments';
 import { ResilientImage } from './ResilientImage';
 
@@ -22,40 +23,34 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({
   const t = translations[language];
 
   return (
-    <div className="min-h-screen w-full bg-[#FFF9F6] text-[#51434A] flex flex-col justify-between relative overflow-hidden animate-page-enter">
-      {/* Subtle cream & soft rose editorial radial light washes */}
-      <div
-        className="pointer-events-none absolute -top-40 right-0 w-[34rem] h-[34rem] rounded-full bg-gradient-to-br from-[#F4DDE3]/45 via-[#F3E9DD]/30 to-transparent blur-3xl"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-40 left-0 w-[36rem] h-[36rem] rounded-full bg-gradient-to-tr from-[#F3E9DD]/80 via-[#F4DDE3]/25 to-transparent blur-3xl"
-        aria-hidden="true"
-      />
+    <div className="min-h-screen w-full bg-transparent text-[#51434A] flex flex-col justify-between relative overflow-hidden animate-page-enter">
+      <AmbientAurora mode="gate" />
 
       {/* Top Bar Contract: 3 zones */}
-      <header className="relative z-10 max-w-6xl w-full mx-auto flex items-center justify-between gap-8 px-5 sm:px-8 py-6 border-b border-[#EAE0D8]/70">
-        <span className="font-serif-editorial text-xl sm:text-2xl font-normal tracking-tight text-[#51434A] whitespace-nowrap shrink-0">
-          {t.brandName}
-        </span>
+      <header className="relative z-10 w-full rose-glass-chrome border-b border-white/65">
+        <div className="max-w-6xl w-full mx-auto flex items-center justify-between gap-8 px-5 sm:px-8 py-5">
+          <span className="font-serif-editorial text-xl sm:text-2xl font-normal tracking-tight text-[#51434A] whitespace-nowrap shrink-0">
+            {t.brandName}
+          </span>
 
-        <div className="hidden md:flex items-center gap-6 text-xs tracking-wide text-[#7D6B74]">
-          <span className="whitespace-nowrap shrink-0">
-            {t.home.forRecipient(recipientName)}
-          </span>
-          <span aria-hidden="true">·</span>
-          <span className="whitespace-nowrap shrink-0">
-            {t.secondaryTagline}
-          </span>
+          <div className="hidden md:flex items-center gap-6 text-xs tracking-wide text-[#7D6B74]">
+            <span className="whitespace-nowrap shrink-0">
+              {t.home.forRecipient(recipientName)}
+            </span>
+            <span aria-hidden="true">·</span>
+            <span className="whitespace-nowrap shrink-0">
+              {t.secondaryTagline}
+            </span>
+          </div>
+
+          <button
+            onClick={onNeedHug}
+            className="min-h-[44px] px-4 py-2 rounded-full border border-[#E8A2B5]/70 bg-white/75 backdrop-blur-md text-xs font-medium text-[#51434A] hover:bg-[#F4DDE3]/55 active:scale-[0.98] transition-all duration-150 flex items-center gap-2 whitespace-nowrap shrink-0 cursor-pointer shadow-2xs"
+          >
+            <Heart className="w-3.5 h-3.5 text-[#C97A92] fill-[#F4DDE3]" />
+            <span>{t.common.needAHug}</span>
+          </button>
         </div>
-
-        <button
-          onClick={onNeedHug}
-          className="min-h-[44px] px-4 py-2 rounded-full border border-[#E8A2B5]/70 bg-white/95 text-xs font-medium text-[#51434A] hover:bg-[#F4DDE3]/45 active:scale-[0.98] transition-all duration-150 flex items-center gap-2 whitespace-nowrap shrink-0 cursor-pointer shadow-2xs"
-        >
-          <Heart className="w-3.5 h-3.5 text-[#C97A92] fill-[#F4DDE3]" />
-          <span>{t.common.needAHug}</span>
-        </button>
       </header>
 
       {/* Main Editorial Centerpiece */}
@@ -110,8 +105,8 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({
 
         {/* Right Column: Fine-Art Framed Botanical Heart Print */}
         <div className="lg:col-span-5 flex justify-center">
-          <div className="w-full max-w-md rounded-[2rem] bg-[#F3E9DD]/65 p-3 sm:p-4 border border-[#EAE0D8]">
-            <div className="rounded-[1.5rem] bg-white p-4 sm:p-6 border border-[#EAE0D8] shadow-sm">
+          <div className="w-full max-w-md rounded-[2rem] rose-glass-cream rose-glass-sheen p-3 sm:p-4">
+            <div className="rounded-[1.5rem] editorial-stationary rose-glass-sheen p-4 sm:p-6">
               <div className="aspect-square w-full rounded-2xl overflow-hidden bg-[#FFF9F6] border border-[#F3E9DD]">
                 <ResilientImage
                   src={HERO_BOTANICAL_IMAGE}

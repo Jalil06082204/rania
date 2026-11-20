@@ -757,7 +757,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       openEnvelopeLink: 'Open Envelope in Love Letters',
       curatedSanctuarySpaces: 'Curated Sanctuary Spaces',
       exploreUniverse: 'Explore Your Little Universe',
-      fiveSpacesSubtitle: 'Five spaces crafted for your daily rhythm',
+      fiveSpacesSubtitle: 'Six spaces crafted for your daily rhythm',
       chapters: {
         studyTitle: 'My Study Space',
         studySubtitle: (pending: number) =>
@@ -1505,7 +1505,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       openEnvelopeLink: "Ouvrir l'enveloppe dans Lettres d'Amour",
       curatedSanctuarySpaces: 'Espaces du Sanctuaire',
       exploreUniverse: 'Explore Ton Petit Univers',
-      fiveSpacesSubtitle: 'Cinq espaces pensés pour ton rythme quotidien',
+      fiveSpacesSubtitle: 'Six espaces pensés pour ton rythme quotidien',
       chapters: {
         studyTitle: 'Mon Espace Étude',
         studySubtitle: (pending: number) =>

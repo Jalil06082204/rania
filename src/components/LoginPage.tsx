@@ -17,6 +17,7 @@ import {
   VoiceRecording,
 } from '../types';
 import { soundEngine } from '../utils/sound';
+import { AmbientAurora } from './AmbientAurora';
 import {
   BotanicalSprig,
   FloralCornerFlourish,
@@ -124,16 +125,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#FFF9F6] text-[#51434A] flex flex-col justify-between relative overflow-hidden px-4 sm:px-8 py-6 sm:py-10">
-      {/* Subtle Ambient Radial Glows */}
-      <div
-        className="pointer-events-none absolute -top-28 -left-28 w-[28rem] h-[28rem] rounded-full bg-gradient-to-br from-[#F4DDE3]/50 via-[#F3E9DD]/35 to-transparent blur-3xl"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-28 -right-28 w-[30rem] h-[30rem] rounded-full bg-gradient-to-tl from-[#E8A2B5]/30 via-[#F4DDE3]/35 to-transparent blur-3xl"
-        aria-hidden="true"
-      />
+    <div className="min-h-screen w-full bg-transparent text-[#51434A] flex flex-col justify-between relative overflow-hidden px-4 sm:px-8 py-6 sm:py-10">
+      <AmbientAurora mode="gate" />
 
       {/* Top Editorial Bar */}
       <header className="relative z-10 max-w-5xl w-full mx-auto flex items-center justify-between">
@@ -144,7 +137,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           </span>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-[#7D6B74] bg-white/90 px-3.5 py-1.5 rounded-full border border-[#EAE0D8]">
+        <div className="flex items-center gap-2 text-xs text-[#7D6B74] rose-glass-chrome px-3.5 py-1.5 rounded-full border border-white/70">
           <Lock className="w-3.5 h-3.5 text-[#C97A92]" />
           <span>{t.forRania}</span>
         </div>
@@ -153,10 +146,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       {/* Main Centered Romantic Entrance Card */}
       <main className="relative z-10 max-w-xl w-full mx-auto my-auto py-8">
         <div
-          className={`relative rounded-[2.25rem] bg-white/95 border transition-all duration-700 shadow-[0_24px_60px_-20px_rgba(81,67,74,0.09)] px-6 sm:px-12 py-10 sm:py-14 text-center overflow-hidden ${
+          className={`relative rounded-[2.25rem] editorial-stationary rose-glass-sheen transition-all duration-700 px-6 sm:px-12 py-10 sm:py-14 text-center overflow-hidden ${
             isUnlocking
               ? 'border-[#E8A2B5] ring-4 ring-[#F4DDE3]/70 scale-[1.01]'
-              : 'border-[#EAE0D8]'
+              : ''
           }`}
         >
           {/* Delicate Corner Botanical Flourishes */}
@@ -255,7 +248,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                       placeholder={t.login.passphrasePlaceholder}
                       autoComplete="off"
                       autoFocus
-                      className="w-full min-h-[52px] pl-11 pr-12 rounded-2xl border border-[#EAE0D8] bg-[#FFF9F6] text-sm text-[#51434A] placeholder:text-[#7D6B74]/70 focus:outline-none focus:border-[#C97A92] focus:bg-white transition-colors"
+                      className="w-full min-h-[52px] pl-11 pr-12 rounded-2xl border border-[#EAE0D8]/80 bg-white/65 backdrop-blur-md text-sm text-[#51434A] placeholder:text-[#7D6B74]/70 focus:outline-none focus:border-[#C97A92] focus:bg-white/90 transition-colors"
                     />
                     <button
                       type="button"

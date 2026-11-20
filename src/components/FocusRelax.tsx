@@ -20,6 +20,7 @@ interface FocusRelaxProps {
   settings: AppSettings;
   onUpdateSettings: (partial: Partial<AppSettings>) => void;
   onNotify?: (msg: string) => void;
+  onAmbientModeChange?: (mode: 'focus' | 'rest') => void;
 }
 
 type TimerPreset = 'focus' | 'shortBreak' | 'longBreak' | 'custom';
@@ -28,6 +29,7 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
   settings,
   onUpdateSettings,
   onNotify,
+  onAmbientModeChange,
 }) => {
   const t = translations[settings.language];
 
@@ -79,6 +81,13 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
   // Guided breathing pacer
   const [breathingActive, setBreathingActive] = useState(false);
   const [breathStepIndex, setBreathStepIndex] = useState<number>(0);
+
+  // Shift ambient aurora warmth gently between Focus and Rest states
+  useEffect(() => {
+    const isRest =
+      preset === 'shortBreak' || preset === 'longBreak' || breathingActive;
+    onAmbientModeChange?.(isRest ? 'rest' : 'focus');
+  }, [preset, breathingActive, onAmbientModeChange]);
 
   useEffect(() => {
     if (!breathingActive) return;
@@ -262,7 +271,7 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
       {/* Main Grid: Pomodoro Timer (7 cols) + Gentle Self-Care & Breathing (5 cols) */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Pomodoro Timer Stage */}
-        <div className="lg:col-span-7 rounded-3xl editorial-card p-6 sm:p-9 flex flex-col items-center space-y-7">
+        <div className="lg:col-span-7 rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-9 flex flex-col items-center space-y-7">
           {/* Preset Selector Tabs */}
           <div className="w-full flex flex-wrap items-center justify-center gap-1.5 p-1.5 bg-[#F3E9DD]/75 rounded-2xl">
             <button
@@ -430,7 +439,7 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
         {/* Right: Gentle Reminders to Hydrate, Stretch & Rest (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Hydration & Self-Care Reminders */}
-          <div className="rounded-3xl editorial-card p-6 sm:p-7 space-y-5">
+          <div className="rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-7 space-y-5">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="font-serif-editorial text-xl font-normal text-[#51434A]">
@@ -511,7 +520,7 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
           </div>
 
           {/* Guided Breathing Sanctuary */}
-          <div className="rounded-3xl bg-[#F3E9DD]/65 border border-[#EAE0D8] p-6 sm:p-7 text-center space-y-4">
+          <div className="rounded-3xl rose-glass-cream rose-glass-sheen p-6 sm:p-7 text-center space-y-4">
             <h3 className="font-serif-editorial text-xl font-normal text-[#51434A]">
               {t.focus.breathingTitle}
             </h3>

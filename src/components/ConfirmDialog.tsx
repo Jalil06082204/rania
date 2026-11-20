@@ -29,7 +29,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       aria-modal="true"
       aria-labelledby="confirm-dialog-title"
     >
-      <div className="relative w-full max-w-md rounded-3xl bg-[#FFF9F6] border border-[#EAE0D8] p-6 sm:p-8 shadow-xl space-y-5 animate-page-enter">
+      <div className="relative w-full max-w-md rounded-3xl editorial-stationary p-6 sm:p-8 space-y-5 animate-page-enter">
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-full text-[#7D6B74] hover:text-[#51434A] hover:bg-[#F3E9DD]/60 transition-colors"

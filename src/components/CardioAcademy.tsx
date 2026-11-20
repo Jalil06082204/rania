@@ -881,7 +881,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
     <div className="space-y-10 pb-12 animate-page-enter">
       {/* Mandatory Medical & Educational Disclaimer Banner */}
       <aside
-        className="rounded-3xl bg-[#F3E9DD]/75 border border-[#EAE0D8] p-5 sm:p-6 flex items-start gap-3.5"
+        className="rounded-3xl rose-glass-cream rose-glass-sheen p-5 sm:p-6 flex items-start gap-3.5"
         aria-label={t.cardio.disclaimerTitle}
       >
         <AlertCircle className="w-5 h-5 text-[#C97A92] shrink-0 mt-0.5" />
@@ -916,7 +916,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
         </div>
 
         {/* Sub-mode Switcher */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#F3E9DD]/80 rounded-2xl self-start lg:self-auto">
+        <div className="flex flex-wrap items-center gap-1.5 p-1.5 rose-glass-cream rounded-2xl self-start lg:self-auto">
           <button
             onClick={() => setSubMode('flashcards')}
             className={`min-h-[42px] px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
@@ -989,7 +989,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
           )}
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
           {CARDIO_CATEGORIES.map((category, idx) => {
             const catCards = normalizedFlashcards.filter(
               (f) => f.category === category
@@ -1008,13 +1008,13 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
                 onClick={() =>
                   setSelectedCategory(isSelected ? 'All' : category)
                 }
-                className={`text-left rounded-2xl p-4 border transition-all flex flex-col justify-between min-h-[116px] cursor-pointer ${
+                className={`text-left rounded-2xl p-3.5 sm:p-4 min-w-0 overflow-hidden transition-all flex flex-col justify-between min-h-[116px] cursor-pointer ${
                   isSelected
-                    ? 'bg-[#51434A] text-[#FFF9F6] border-[#51434A] shadow-xs'
-                    : 'bg-white text-[#51434A] border-[#EAE0D8] hover:border-[#E8A2B5]'
+                    ? 'bg-[#51434A] text-[#FFF9F6] border border-[#51434A] shadow-xs'
+                    : 'editorial-card editorial-card-interactive rose-glass-sheen text-[#51434A]'
                 }`}
               >
-                <div className="space-y-1">
+                <div className="space-y-1 min-w-0 w-full">
                   <span
                     className={`font-serif-editorial italic text-xs block ${
                       isSelected ? 'text-[#E8A2B5]' : 'text-[#C97A92]'
@@ -1022,7 +1022,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
                   >
                     {t.cardio.modulePrefix} 0{idx + 1}
                   </span>
-                  <span className="font-serif-editorial text-sm sm:text-[15px] font-normal leading-snug block">
+                  <span className="font-serif-editorial text-[13px] sm:text-[13.5px] font-normal leading-snug block break-words [overflow-wrap:anywhere] hyphens-auto">
                     {getCatLabel(category)}
                   </span>
                 </div>
@@ -1142,7 +1142,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
           {isImportModalOpen && (
             <form
               onSubmit={handleBulkImportCards}
-              className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 sm:p-8 space-y-4"
+              className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 sm:p-8 space-y-4"
             >
               <div className="flex items-center justify-between pb-3 border-b border-[#EAE0D8]">
                 <div>
@@ -1230,7 +1230,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
           {isCardModalOpen && (
             <form
               onSubmit={handleSaveCard}
-              className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 sm:p-8 space-y-4"
+              className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 sm:p-8 space-y-4"
             >
               <div className="flex items-center justify-between pb-3 border-b border-[#EAE0D8]">
                 <h3 className="font-serif-editorial text-xl text-[#51434A]">
@@ -1327,7 +1327,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
           )}
 
           {filteredFlashcards.length === 0 ? (
-            <div className="rounded-3xl editorial-card p-12 text-center space-y-4">
+            <div className="rounded-3xl editorial-card rose-glass-sheen p-12 text-center space-y-4">
               <Layers className="w-8 h-8 text-[#C97A92] mx-auto" />
               <div className="space-y-1 max-w-md mx-auto">
                 <h3 className="font-serif-editorial text-2xl text-[#51434A]">
@@ -1379,7 +1379,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
                 return (
                   <article
                     key={card.id}
-                    className="rounded-3xl editorial-card p-6 sm:p-7 flex flex-col justify-between space-y-5"
+                    className="rounded-3xl editorial-card editorial-card-interactive rose-glass-sheen p-6 sm:p-7 flex flex-col justify-between space-y-5"
                   >
                     <div className="space-y-3.5">
                       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#7D6B74]">
@@ -1584,7 +1584,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
 
           {/* Score & Progress Banner */}
           {categoryFilteredQuizzes.length > 0 && (
-            <div className="rounded-3xl bg-[#F3E9DD]/65 border border-[#EAE0D8] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="rounded-3xl rose-glass-cream rose-glass-sheen p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
                 <p className="text-xs text-[#7D6B74]">
                   {t.cardio.quizView.scoreBannerHeading}
@@ -1638,7 +1638,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
           {isQuizModalOpen && (
             <form
               onSubmit={handleSaveQuiz}
-              className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 sm:p-8 space-y-4"
+              className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 sm:p-8 space-y-4"
             >
               <div className="flex items-center justify-between pb-3 border-b border-[#EAE0D8]">
                 <div>
@@ -1779,7 +1779,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
           )}
 
           {displayedQuizzes.length === 0 ? (
-            <div className="rounded-3xl editorial-card p-12 text-center space-y-4">
+            <div className="rounded-3xl editorial-card rose-glass-sheen p-12 text-center space-y-4">
               <HelpCircle className="w-8 h-8 text-[#C97A92] mx-auto" />
               <div className="space-y-1 max-w-md mx-auto">
                 <h3 className="font-serif-editorial text-2xl text-[#51434A]">
@@ -1824,7 +1824,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
                 return (
                   <article
                     key={q.id}
-                    className="rounded-3xl editorial-card p-6 sm:p-8 space-y-5"
+                    className="rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-5"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#7D6B74]">
                       <div className="flex flex-wrap items-center gap-2">
@@ -1978,7 +1978,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
       {subMode === 'ecg' && (
         <div className="space-y-10">
           {/* PART A: Interactive ECG Rhythm Identification Cases */}
-          <section className="rounded-3xl editorial-card p-6 sm:p-8 space-y-6">
+          <section className="rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#EAE0D8]">
               <div className="space-y-1">
                 <span className="text-xs font-semibold text-[#C97A92] uppercase tracking-wider">
@@ -2005,7 +2005,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
             {isEcgCaseModalOpen && (
               <form
                 onSubmit={handleAddCustomEcgCase}
-                className="rounded-3xl editorial-stationary border-[#E8A2B5] p-6 space-y-4"
+                className="rounded-3xl editorial-stationary rose-glass-sheen border-[#E8A2B5] p-6 space-y-4"
               >
                 <div className="flex items-center justify-between pb-3 border-b border-[#EAE0D8]">
                   <h3 className="font-serif-editorial text-xl text-[#51434A]">
@@ -2392,7 +2392,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
 
           {/* PART B: Interactive P-QRS-T Segment Annotator */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            <div className="lg:col-span-7 rounded-3xl editorial-card p-6 sm:p-8 space-y-5">
+            <div className="lg:col-span-7 rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-5">
               <div>
                 <h3 className="font-serif-editorial text-2xl font-normal text-[#51434A]">
                   {t.cardio.ecgView.semiologyTitle}
@@ -2426,7 +2426,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
               </p>
             </div>
 
-            <div className="lg:col-span-5 rounded-3xl editorial-stationary p-6 sm:p-8 space-y-5">
+            <div className="lg:col-span-5 rounded-3xl editorial-stationary rose-glass-sheen p-6 sm:p-8 space-y-5">
               {activeEcgWave && (
                 <>
                   <div className="pb-4 border-b border-[#EAE0D8] space-y-1">
@@ -2526,7 +2526,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
 
           {/* 4 Summary Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-3xl editorial-card p-6 space-y-2">
+            <div className="rounded-3xl editorial-card rose-glass-sheen p-6 space-y-2">
               <p className="text-xs text-[#7D6B74]">
                 {t.cardio.trackingView.cardsUnderstoodTitle}
               </p>
@@ -2543,7 +2543,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
               </p>
             </div>
 
-            <div className="rounded-3xl editorial-card p-6 space-y-2">
+            <div className="rounded-3xl editorial-card rose-glass-sheen p-6 space-y-2">
               <p className="text-xs text-[#7D6B74]">
                 {t.cardio.trackingView.quizAccuracyTitle}
               </p>
@@ -2559,7 +2559,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
               </p>
             </div>
 
-            <div className="rounded-3xl editorial-card p-6 space-y-2">
+            <div className="rounded-3xl editorial-card rose-glass-sheen p-6 space-y-2">
               <p className="text-xs text-[#7D6B74]">
                 {t.cardio.trackingView.ecgIdentifiedTitle}
               </p>
@@ -2576,7 +2576,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
               </p>
             </div>
 
-            <div className="rounded-3xl editorial-card p-6 space-y-2">
+            <div className="rounded-3xl editorial-card rose-glass-sheen p-6 space-y-2">
               <p className="text-xs text-[#7D6B74]">
                 {t.cardio.trackingView.studyGoalsValidatedTitle}
               </p>
@@ -2595,7 +2595,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
           {/* Weekly Progress Bar Chart (7 Days) + Module Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left (7 cols): Weekly Activity Chart */}
-            <div className="lg:col-span-7 rounded-3xl editorial-card p-6 sm:p-8 space-y-6">
+            <div className="lg:col-span-7 rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-6">
               <div>
                 <h3 className="font-serif-editorial text-xl text-[#51434A]">
                   {t.cardio.trackingView.weeklyChartTitle}
@@ -2642,7 +2642,7 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
             </div>
 
             {/* Right (5 cols): Mastery by Cardiology Module */}
-            <div className="lg:col-span-5 rounded-3xl editorial-card p-6 sm:p-8 space-y-4">
+            <div className="lg:col-span-5 rounded-3xl editorial-card rose-glass-sheen p-6 sm:p-8 space-y-4">
               <h3 className="font-serif-editorial text-xl text-[#51434A]">
                 {t.cardio.trackingView.moduleMasteryTitle}
               </h3>
