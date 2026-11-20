@@ -48,6 +48,8 @@ import { StudySpace } from './components/StudySpace';
 import { ThingsILovePage } from './components/ThingsILovePage';
 import { ToastBanner } from './components/ToastBanner';
 import { WelcomePage } from './components/WelcomePage';
+import { SparkleCanvas } from './components/SparkleCanvas';
+import { emitRoseGoldSparkles } from './utils/sparkles';
 
 const UI_SECTION_STORAGE_KEY = 'hlh_active_section_v2';
 const SESSION_TOKEN_HEADER_KEY = 'hlh_opaque_session_id_v1';
@@ -166,6 +168,14 @@ export default function App() {
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
+  };
+
+  const openHugModal = (e?: React.MouseEvent) => {
+    emitRoseGoldSparkles(
+      'hug',
+      e ? { x: e.clientX, y: e.clientY } : undefined
+    );
+    setIsHugModalOpen(true);
   };
 
   useEffect(() => {
@@ -673,11 +683,12 @@ export default function App() {
   if (activeSection === 'welcome') {
     return (
       <>
+        <SparkleCanvas />
         <WelcomePage
           recipientName={settings.recipientName}
           language={settings.language}
           onEnterWorld={handleEnterWorld}
-          onNeedHug={() => setIsHugModalOpen(true)}
+          onNeedHug={() => openHugModal()}
         />
         <HugModal
           isOpen={isHugModalOpen}
@@ -741,6 +752,7 @@ export default function App() {
     <div className="min-h-screen w-full bg-transparent text-[#51434A] flex flex-col lg:flex-row relative overflow-x-hidden">
       {/* Living Ambient Rose-Petal & Champagne-Cream Aurora Backdrop */}
       <AmbientAurora mode={ambientMode} />
+      <SparkleCanvas />
 
       {/* Desktop Editorial Rose-Quartz Glass Sidebar Navigation */}
       <aside className="hidden lg:flex lg:w-68 lg:flex-col lg:fixed lg:inset-y-0 rose-glass-chrome border-r border-white/65 z-30 justify-between p-7">
@@ -921,7 +933,7 @@ export default function App() {
               <Settings className="w-4 h-4" />
             </button>
             <button
-              onClick={() => setIsHugModalOpen(true)}
+              onClick={openHugModal}
               className="min-h-[40px] px-3.5 py-1.5 rounded-full border border-[#E8A2B5]/70 bg-white hover:bg-[#F4DDE3]/60 text-xs font-medium text-[#51434A] active:scale-[0.98] transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer shadow-2xs"
             >
               <Heart className="w-3.5 h-3.5 text-[#C97A92] fill-[#F4DDE3]" />
@@ -947,7 +959,7 @@ export default function App() {
               flashcards={flashcards}
               letters={letters}
               onNavigate={handleNavigate}
-              onNeedHug={() => setIsHugModalOpen(true)}
+              onNeedHug={() => openHugModal()}
             />
           )}
 
@@ -1020,7 +1032,7 @@ export default function App() {
               onRestoreSampleMemories={() => handleRestoreScope('memories')}
               onOpenThingsILove={() => handleNavigate('things-i-love')}
               thingsILoveCount={thingsILove.length}
-              onNeedHug={() => setIsHugModalOpen(true)}
+              onNeedHug={() => openHugModal()}
               onNotify={showToast}
             />
           )}
@@ -1034,7 +1046,7 @@ export default function App() {
               onDeleteItem={handleDeleteLovedQuality}
               onRestoreSamples={() => handleRestoreScope('thingsILove')}
               onBackToLoveFromMe={() => handleNavigate('letters')}
-              onNeedHug={() => setIsHugModalOpen(true)}
+              onNeedHug={() => openHugModal()}
               onNotify={showToast}
             />
           )}

@@ -197,42 +197,137 @@
   transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.envelope-stage {
+/* ============================================================================
+   Phase 2: Pure CSS 3D Depth (Flashcards · 3D Envelope · Focus Rings)
+   ============================================================================ */
+
+/* Cardio Academy 3D Flashcard Flip */
+.flashcard-3d-scene {
   perspective: 1200px;
+}
+
+.flashcard-3d-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  transform-style: preserve-3d;
+  transition: transform 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.flashcard-3d-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-3d-face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flashcard-3d-front {
+  transform: rotateY(0deg);
+}
+
+.flashcard-3d-back {
+  transform: rotateY(180deg);
+  pointer-events: none;
+}
+
+.flashcard-3d-inner.is-flipped .flashcard-3d-front {
+  pointer-events: none;
+}
+
+.flashcard-3d-inner.is-flipped .flashcard-3d-back {
+  pointer-events: auto;
+}
+
+/* Interactive 3D Envelope Stage */
+.envelope-stage {
+  perspective: 1400px;
+}
+
+.envelope-3d-body {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .envelope-flap {
   transform-origin: top center;
   transform-style: preserve-3d;
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .envelope-flap-open {
-  transform: rotateX(175deg);
+  transform: rotateX(174deg);
+}
+
+.envelope-flap-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.envelope-flap-inner {
+  transform: rotateX(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .envelope-seal {
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .envelope-seal-open {
-  transform: translateY(-18px) scale(0.85);
+  transform: translate3d(0, -20px, 24px) scale(0.76) rotateZ(-8deg);
   opacity: 0;
   pointer-events: none;
 }
 
+.envelope-card-insert {
+  transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1) 0.14s,
+              opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+
 .envelope-letter-rise {
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Focus & Relax 3D Layered Frosted Rings */
+.focus-ring-3d-stage {
+  perspective: 950px;
+  transform-style: preserve-3d;
+}
+
+@keyframes focusRingPulse3D {
+  0%, 100% {
+    transform: translateZ(0px) scale3d(1, 1, 1);
+    box-shadow:
+      inset 0 2px 10px rgba(255, 255, 255, 0.88),
+      0 18px 42px -14px rgba(184, 107, 130, 0.24),
+      0 6px 18px -6px rgba(81, 67, 74, 0.12);
+  }
+  50% {
+    transform: translateZ(10px) scale3d(1.022, 1.022, 1);
+    box-shadow:
+      inset 0 2px 14px rgba(255, 255, 255, 0.96),
+      0 26px 54px -14px rgba(201, 122, 146, 0.34),
+      0 10px 26px -6px rgba(81, 67, 74, 0.16);
+  }
+}
+
+.animate-ring-pulse-3d {
+  animation: focusRingPulse3D 4.2s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-float-slow,
   .animate-breathe,
-  .animate-page-enter {
-    animation: none;
+  .animate-page-enter,
+  .animate-ring-pulse-3d {
+    animation: none !important;
   }
   .editorial-card-interactive:hover {
     transform: none;
@@ -240,9 +335,12 @@
   .rose-glass-sheen::after {
     display: none;
   }
+  .flashcard-3d-inner,
+  .envelope-3d-body,
   .envelope-flap,
   .envelope-seal,
+  .envelope-card-insert,
   .envelope-letter-rise {
-    transition: none;
+    transition: none !important;
   }
 }

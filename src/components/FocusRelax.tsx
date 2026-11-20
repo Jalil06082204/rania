@@ -14,6 +14,7 @@ import {
 import { translations } from '../i18n/translations';
 import { AppSettings } from '../types';
 import { soundEngine } from '../utils/sound';
+import { emitRoseGoldSparkles } from '../utils/sparkles';
 import { FloralCornerFlourish } from './BotanicalOrnaments';
 
 interface FocusRelaxProps {
@@ -122,6 +123,7 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
     setIsRunning(false);
     setHasStarted(false);
     soundEngine.playChime(settings.soundEnabled);
+    emitRoseGoldSparkles('session');
     if (preset === 'focus' || preset === 'custom') {
       onUpdateSettings({
         completedPomodoroSessions: settings.completedPomodoroSessions + 1,
@@ -342,16 +344,35 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
             </form>
           )}
 
-          {/* Circular Progress Dial */}
-          <div className="relative w-64 h-64 flex items-center justify-center">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 256 256">
+          {/* 3D Layered Frosted-Glass Circular Progress Dial */}
+          <div className="focus-ring-3d-stage relative w-68 h-68 flex items-center justify-center">
+            {/* Outer Frosted Rose-Quartz Halo Ring (pulses gently when active) */}
+            <div
+              className={`absolute inset-1 rounded-full border border-white/80 backdrop-blur-md transition-all duration-700 ${
+                isRunning
+                  ? 'animate-ring-pulse-3d'
+                  : 'shadow-[inset_0_2px_10px_rgba(255,255,255,0.88),0_18px_40px_-16px_rgba(81,67,74,0.16)]'
+              }`}
+              style={{
+                background:
+                  'radial-gradient(circle at 35% 28%, rgba(255,253,251,0.82) 0%, rgba(244,221,227,0.42) 55%, rgba(243,233,221,0.68) 100%)',
+                transform: 'translateZ(0px)',
+              }}
+            />
+
+            {/* Mid 3D Ring Track & Active SVG Arc */}
+            <svg
+              className="relative z-10 w-64 h-64 -rotate-90 drop-shadow-[0_6px_14px_rgba(184,107,130,0.18)]"
+              viewBox="0 0 256 256"
+              style={{ transform: 'translateZ(10px) rotate(-90deg)' }}
+            >
               <circle
                 cx="128"
                 cy="128"
                 r="112"
                 fill="none"
-                stroke="#F3E9DD"
-                strokeWidth="8"
+                stroke="rgba(243, 233, 221, 0.85)"
+                strokeWidth="9"
               />
               <circle
                 cx="128"
@@ -359,7 +380,7 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
                 r="112"
                 fill="none"
                 stroke="#E8A2B5"
-                strokeWidth="8"
+                strokeWidth="9"
                 strokeLinecap="round"
                 strokeDasharray={circleCircumference}
                 strokeDashoffset={strokeDashoffset}
@@ -367,7 +388,15 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
               />
             </svg>
 
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+            {/* Inner Frosted Medallion Core */}
+            <div
+              className="absolute inset-8 rounded-full border border-white/85 backdrop-blur-xl flex flex-col items-center justify-center text-center shadow-[inset_0_2px_10px_rgba(255,255,255,0.92),0_12px_28px_-12px_rgba(81,67,74,0.16)]"
+              style={{
+                background:
+                  'linear-gradient(150deg, rgba(255,253,252,0.88) 0%, rgba(255,248,245,0.72) 65%, rgba(244,221,227,0.34) 100%)',
+                transform: 'translateZ(20px)',
+              }}
+            >
               <span className="text-xs text-[#7D6B74] mb-1">
                 {preset === 'focus'
                   ? t.focus.dialStatusFocus
@@ -528,16 +557,73 @@ export const FocusRelax: React.FC<FocusRelaxProps> = ({
               {t.focus.breathingSubtitle}
             </p>
 
-            <div className="py-4 flex flex-col items-center justify-center">
-              <div
-                className={`w-28 h-28 rounded-full bg-white border border-[#E8A2B5] flex items-center justify-center px-3 shadow-xs ${
-                  breathingActive ? 'animate-breathe' : ''
-                }`}
+            <div className="py-5 flex flex-col items-center justify-center">
+              <button
+                type="button"
+                onClick={() => setBreathingActive((prev) => !prev)}
+                aria-label={
+                  breathingActive
+                    ? t.focus.pauseBreathingBtn
+                    : t.focus.startBreathingBtn
+                }
+                className="focus-ring-3d-stage relative w-36 h-36 flex items-center justify-center cursor-pointer focus:outline-none"
               >
-                <span className="font-serif-editorial italic text-xs text-[#51434A]">
-                  {breathingActive ? currentBreathText : t.focus.tapToBegin}
+                {/* Outer Translucent Rose-Quartz Halo Ring */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-0 rounded-full border border-white/75 backdrop-blur-md transition-transform duration-[3800ms] ease-in-out ${
+                    breathingActive ? 'animate-ring-pulse-3d' : ''
+                  }`}
+                  style={{
+                    background:
+                      'radial-gradient(circle at 30% 30%, rgba(255,253,252,0.75), rgba(244,221,227,0.45) 70%, rgba(232,162,181,0.28) 100%)',
+                    transform: breathingActive
+                      ? breathStepIndex === 0 || breathStepIndex === 1
+                        ? 'translateZ(0px) scale3d(1.16, 1.16, 1)'
+                        : 'translateZ(0px) scale3d(0.9, 0.9, 1)'
+                      : 'translateZ(0px) scale3d(1, 1, 1)',
+                    boxShadow:
+                      'inset 0 2px 10px rgba(255,255,255,0.85), 0 18px 36px -14px rgba(184,107,130,0.22)',
+                  }}
+                />
+
+                {/* Mid Frosted Blush Depth Ring */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-3.5 rounded-full border border-[#E8A2B5]/70 backdrop-blur-lg transition-transform duration-[3800ms] ease-in-out"
+                  style={{
+                    background:
+                      'linear-gradient(145deg, rgba(255,250,248,0.82), rgba(244,221,227,0.46))',
+                    transform: breathingActive
+                      ? breathStepIndex === 0 || breathStepIndex === 1
+                        ? 'translateZ(12px) scale3d(1.12, 1.12, 1)'
+                        : 'translateZ(12px) scale3d(0.92, 0.92, 1)'
+                      : 'translateZ(12px) scale3d(1, 1, 1)',
+                    boxShadow:
+                      'inset 0 1px 6px rgba(255,255,255,0.9), 0 10px 24px -10px rgba(81,67,74,0.14)',
+                  }}
+                />
+
+                {/* Inner Luminous Ivory-Glass Core */}
+                <span
+                  className={`relative z-10 w-24 h-24 rounded-full border border-white/90 backdrop-blur-xl flex items-center justify-center px-3 transition-transform duration-[3800ms] ease-in-out ${
+                    breathingActive ? 'shadow-md' : 'shadow-xs'
+                  }`}
+                  style={{
+                    background:
+                      'linear-gradient(155deg, rgba(255,254,253,0.94), rgba(255,248,245,0.82))',
+                    transform: breathingActive
+                      ? breathStepIndex === 0 || breathStepIndex === 1
+                        ? 'translateZ(24px) scale3d(1.08, 1.08, 1)'
+                        : 'translateZ(24px) scale3d(0.94, 0.94, 1)'
+                      : 'translateZ(24px) scale3d(1, 1, 1)',
+                  }}
+                >
+                  <span className="font-serif-editorial italic text-xs text-[#51434A]">
+                    {breathingActive ? currentBreathText : t.focus.tapToBegin}
+                  </span>
                 </span>
-              </div>
+              </button>
             </div>
 
             <button

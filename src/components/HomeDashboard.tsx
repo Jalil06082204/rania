@@ -27,6 +27,7 @@ import {
   StudyTopic,
 } from '../types';
 import { FloralCornerFlourish, WaxSealHeart } from './BotanicalOrnaments';
+import { Tilt3DCard } from './Tilt3DCard';
 
 interface HomeDashboardProps {
   settings: AppSettings;
@@ -187,7 +188,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       {/* Daily Affirmation & Gentle Daily Reminder to Rest */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Daily Editable Affirmation (7 cols) - Stationery Glass Card */}
-        <div className="lg:col-span-7 rounded-3xl editorial-stationary rose-glass-sheen p-7 sm:p-9 flex flex-col justify-between">
+        <Tilt3DCard maxTiltDeg={4.5} scaleOnHover={1.008} className="lg:col-span-7">
+          <div className="h-full rounded-3xl editorial-stationary rose-glass-sheen p-7 sm:p-9 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-4 mb-5">
               <div className="flex items-center gap-2 text-xs text-[#7D6B74]">
@@ -249,10 +251,12 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             <span>{t.home.oneGentlePage(settings.recipientName)}</span>
             <span>{t.home.keptInSanctuary}</span>
           </div>
-        </div>
+          </div>
+        </Tilt3DCard>
 
         {/* Gentle Daily Reminder to Rest (5 cols) - Warm Cream Glass Surface */}
-        <div className="lg:col-span-5 rounded-3xl rose-glass-cream rose-glass-sheen p-7 sm:p-9 flex flex-col justify-between">
+        <Tilt3DCard maxTiltDeg={5} scaleOnHover={1.008} className="lg:col-span-5">
+          <div className="h-full rounded-3xl rose-glass-cream rose-glass-sheen p-7 sm:p-9 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-4 mb-5">
               <div className="flex items-center gap-2 text-xs text-[#7D6B74]">
@@ -325,7 +329,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
               {t.home.sipWaterBtn}
             </button>
           </div>
-        </div>
+          </div>
+        </Tilt3DCard>
       </section>
 
       {/* Today's Study Goals & Real Study Progress Indicator */}
@@ -503,37 +508,39 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
           {/* Featured Love Note - Postcard Glass Style */}
           {featuredLetter && (
-            <div className="rounded-3xl editorial-stationary rose-glass-sheen p-6 sm:p-8 space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs text-[#7D6B74]">
-                  <WaxSealHeart className="w-6 h-6" />
-                  <span>{t.home.featuredLoveNote}</span>
+            <Tilt3DCard maxTiltDeg={5.5} scaleOnHover={1.012}>
+              <div className="rounded-3xl editorial-stationary rose-glass-sheen p-6 sm:p-8 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs text-[#7D6B74]">
+                    <WaxSealHeart className="w-6 h-6" />
+                    <span>{t.home.featuredLoveNote}</span>
+                  </div>
+                  <span className="text-xs text-[#7D6B74] italic">
+                    {featuredLetter.isSample
+                      ? t.common.sampleLabel
+                      : t.home.personalNote}
+                  </span>
                 </div>
-                <span className="text-xs text-[#7D6B74] italic">
-                  {featuredLetter.isSample
-                    ? t.common.sampleLabel
-                    : t.home.personalNote}
-                </span>
+                <h3 className="font-serif-editorial text-xl font-normal text-[#51434A]">
+                  {featuredLetter.occasion}
+                </h3>
+                <p className="text-sm sm:text-base text-[#51434A]/90 line-clamp-3 leading-relaxed italic font-serif-editorial">
+                  “
+                  {featuredLetter.content.split('\n\n')[1] ||
+                    featuredLetter.content}
+                  ”
+                </p>
+                <div className="pt-2">
+                  <button
+                    onClick={() => onNavigate('letters')}
+                    className="min-h-[40px] text-xs font-semibold text-[#51434A] hover:text-[#C97A92] transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <span>{t.home.openEnvelopeLink}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
-              <h3 className="font-serif-editorial text-xl font-normal text-[#51434A]">
-                {featuredLetter.occasion}
-              </h3>
-              <p className="text-sm sm:text-base text-[#51434A]/90 line-clamp-3 leading-relaxed italic font-serif-editorial">
-                “
-                {featuredLetter.content.split('\n\n')[1] ||
-                  featuredLetter.content}
-                ”
-              </p>
-              <div className="pt-2">
-                <button
-                  onClick={() => onNavigate('letters')}
-                  className="min-h-[40px] text-xs font-semibold text-[#51434A] hover:text-[#C97A92] transition-colors inline-flex items-center gap-1.5 cursor-pointer"
-                >
-                  <span>{t.home.openEnvelopeLink}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
+            </Tilt3DCard>
           )}
         </div>
       </section>
@@ -603,26 +610,32 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           ].map((card) => {
             const Icon = card.icon;
             return (
-              <button
+              <Tilt3DCard
                 key={card.id}
-                onClick={() => onNavigate(card.id)}
-                className="text-left rounded-2xl editorial-card editorial-card-interactive rose-glass-sheen p-6 flex flex-col justify-between min-h-[164px] group cursor-pointer"
+                maxTiltDeg={6.5}
+                scaleOnHover={1.016}
+                className="h-full"
               >
-                <div className="flex items-center justify-between w-full">
-                  <span className="font-serif-editorial italic text-sm text-[#C97A92]">
-                    {card.num}
-                  </span>
-                  <Icon className="w-4 h-4 text-[#C97A92] group-hover:scale-110 transition-transform" />
-                </div>
-                <div className="mt-6">
-                  <h3 className="font-serif-editorial text-lg font-normal text-[#51434A] group-hover:text-[#B86B82] transition-colors">
-                    {card.title}
-                  </h3>
-                  <p className="text-xs text-[#7D6B74] mt-1 leading-relaxed">
-                    {card.subtitle}
-                  </p>
-                </div>
-              </button>
+                <button
+                  onClick={() => onNavigate(card.id)}
+                  className="w-full h-full text-left rounded-2xl editorial-card editorial-card-interactive rose-glass-sheen p-6 flex flex-col justify-between min-h-[164px] group cursor-pointer"
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className="font-serif-editorial italic text-sm text-[#C97A92]">
+                      {card.num}
+                    </span>
+                    <Icon className="w-4 h-4 text-[#C97A92] group-hover:scale-110 transition-transform" />
+                  </div>
+                  <div className="mt-6">
+                    <h3 className="font-serif-editorial text-lg font-normal text-[#51434A] group-hover:text-[#B86B82] transition-colors">
+                      {card.title}
+                    </h3>
+                    <p className="text-xs text-[#7D6B74] mt-1 leading-relaxed">
+                      {card.subtitle}
+                    </p>
+                  </div>
+                </button>
+              </Tilt3DCard>
             );
           })}
         </div>

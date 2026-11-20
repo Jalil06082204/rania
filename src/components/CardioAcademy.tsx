@@ -1377,139 +1377,247 @@ export const CardioAcademy: React.FC<CardioAcademyProps> = ({
                   card.reviewStatus === 'needs_revision';
 
                 return (
-                  <article
+                  <div
                     key={card.id}
-                    className="rounded-3xl editorial-card editorial-card-interactive rose-glass-sheen p-6 sm:p-7 flex flex-col justify-between space-y-5"
+                    className="flashcard-3d-scene"
                   >
-                    <div className="space-y-3.5">
-                      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#7D6B74]">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-[#51434A]">
-                            {getCatLabel(card.category)}
-                          </span>
-                          <span aria-hidden="true">·</span>
-                          <span>
-                            {card.isSample
-                              ? t.cardio.flashcardsView.sampleBadge
-                              : t.cardio.flashcardsView.personalBadge}
-                          </span>
-                        </div>
+                    <div
+                      className={`flashcard-3d-inner ${
+                        isRevealed ? 'is-flipped' : ''
+                      }`}
+                    >
+                      {/* FRONT FACE: Question */}
+                      <article className="flashcard-3d-face flashcard-3d-front rounded-3xl editorial-card editorial-card-interactive rose-glass-sheen p-6 sm:p-7 flex flex-col justify-between space-y-5">
+                        <div className="space-y-3.5">
+                          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#7D6B74]">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-[#51434A]">
+                                {getCatLabel(card.category)}
+                              </span>
+                              <span aria-hidden="true">·</span>
+                              <span>
+                                {card.isSample
+                                  ? t.cardio.flashcardsView.sampleBadge
+                                  : t.cardio.flashcardsView.personalBadge}
+                              </span>
+                            </div>
 
-                        <span
-                          className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium ${
-                            isUnderstood
-                              ? 'bg-[#F0FDF4] text-[#15803D]'
-                              : isNeedsRevision
-                              ? 'bg-[#FEF2F2] text-[#B91C1C]'
-                              : 'bg-[#FFF9F6] text-[#7D6B74]'
-                          }`}
-                        >
-                          {isUnderstood
-                            ? t.cardio.flashcardsView.statusUnderstood
-                            : isNeedsRevision
-                            ? t.cardio.flashcardsView.statusNeedsRevision
-                            : t.cardio.flashcardsView.statusToStudy}
-                        </span>
-                      </div>
-
-                      {/* Front: Question */}
-                      <div className="space-y-1">
-                        <p className="text-[10px] uppercase tracking-wider text-[#C97A92] font-semibold">
-                          {t.cardio.flashcardsView.frontHeading}
-                        </p>
-                        <h3 className="font-serif-editorial text-lg sm:text-xl font-normal text-[#51434A] leading-snug">
-                          {card.question}
-                        </h3>
-                      </div>
-
-                      {/* Back: Answer & Reference */}
-                      {isRevealed ? (
-                        <div className="pt-4 border-t border-[#EAE0D8] space-y-2.5 animate-page-enter">
-                          <p className="text-[10px] uppercase tracking-wider text-[#15803D] font-semibold">
-                            {t.cardio.flashcardsView.backHeading}
-                          </p>
-                          <p className="text-sm text-[#51434A] leading-relaxed whitespace-pre-line">
-                            {card.answer}
-                          </p>
-                          <p className="text-[11px] text-[#7D6B74] italic pt-1">
-                            {card.lectureRef}
-                          </p>
-                        </div>
-                      ) : (
-                        <p className="text-xs text-[#7D6B74] italic pt-1">
-                          {t.cardio.flashcardsView.mentalPrompt}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="pt-4 border-t border-[#EAE0D8]/70 space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <button
-                          onClick={() => toggleRevealCard(card.id)}
-                          className="min-h-[42px] px-4 py-2 rounded-xl bg-[#F4DDE3]/80 hover:bg-[#E8A2B5]/50 text-xs font-semibold text-[#51434A] transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
-                        >
-                          <Eye className="w-3.5 h-3.5 text-[#C97A92]" />
-                          <span>
-                            {isRevealed
-                              ? t.cardio.flashcardsView.hideAnswerBtn
-                              : t.cardio.flashcardsView.revealAnswerBtn}
-                          </span>
-                        </button>
-
-                        {/* Self-Evaluation Buttons */}
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            onClick={() =>
-                              handleMarkCardStatus(card, 'understood')
-                            }
-                            className={`min-h-[38px] px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer ${
-                              isUnderstood
-                                ? 'bg-[#15803D] text-white'
-                                : 'bg-[#F0FDF4] text-[#15803D] hover:bg-[#DCFCE7]'
-                            }`}
-                          >
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>
-                              {t.cardio.flashcardsView.markUnderstoodBtn}
+                            <span
+                              className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium ${
+                                isUnderstood
+                                  ? 'bg-[#F0FDF4] text-[#15803D]'
+                                  : isNeedsRevision
+                                  ? 'bg-[#FEF2F2] text-[#B91C1C]'
+                                  : 'bg-[#FFF9F6] text-[#7D6B74]'
+                              }`}
+                            >
+                              {isUnderstood
+                                ? t.cardio.flashcardsView.statusUnderstood
+                                : isNeedsRevision
+                                ? t.cardio.flashcardsView.statusNeedsRevision
+                                : t.cardio.flashcardsView.statusToStudy}
                             </span>
-                          </button>
+                          </div>
 
-                          <button
-                            onClick={() =>
-                              handleMarkCardStatus(card, 'needs_revision')
-                            }
-                            className={`min-h-[38px] px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer ${
-                              isNeedsRevision
-                                ? 'bg-[#B91C1C] text-white'
-                                : 'bg-[#FEF2F2] text-[#B91C1C] hover:bg-[#FEE2E2]'
-                            }`}
+                          <div
+                            onClick={() => toggleRevealCard(card.id)}
+                            className="space-y-2 pt-1 cursor-pointer"
                           >
-                            <RefreshCw className="w-3.5 h-3.5" />
-                            <span>
-                              {t.cardio.flashcardsView.markNeedsRevisionBtn}
-                            </span>
-                          </button>
+                            <p className="text-[10px] uppercase tracking-wider text-[#C97A92] font-semibold">
+                              {t.cardio.flashcardsView.frontHeading}
+                            </p>
+                            <h3 className="font-serif-editorial text-lg sm:text-xl font-normal text-[#51434A] leading-snug">
+                              {card.question}
+                            </h3>
+                            <p className="text-xs text-[#7D6B74] italic pt-2">
+                              {t.cardio.flashcardsView.mentalPrompt}
+                            </p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="flex items-center justify-end gap-2 text-xs">
-                        <button
-                          onClick={() => openEditCardModal(card)}
-                          className="min-h-[34px] px-2.5 py-1 rounded-lg text-[#7D6B74] hover:text-[#51434A] hover:bg-[#FFF9F6] flex items-center gap-1 cursor-pointer"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                          <span>{t.common.edit}</span>
-                        </button>
-                        <button
-                          onClick={() => setCardToDelete(card)}
-                          className="min-h-[34px] px-2.5 py-1 rounded-lg text-[#7D6B74] hover:text-[#B91C1C] flex items-center gap-1 cursor-pointer"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span>{t.common.delete}</span>
-                        </button>
-                      </div>
+                        <div className="pt-4 border-t border-[#EAE0D8]/70 space-y-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <button
+                              type="button"
+                              onClick={() => toggleRevealCard(card.id)}
+                              className="min-h-[42px] px-4 py-2 rounded-xl bg-[#F4DDE3]/80 hover:bg-[#E8A2B5]/50 text-xs font-semibold text-[#51434A] transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+                            >
+                              <Eye className="w-3.5 h-3.5 text-[#C97A92]" />
+                              <span>{t.cardio.flashcardsView.revealAnswerBtn}</span>
+                            </button>
+
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleMarkCardStatus(card, 'understood')
+                                }
+                                className={`min-h-[38px] px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer ${
+                                  isUnderstood
+                                    ? 'bg-[#15803D] text-white'
+                                    : 'bg-[#F0FDF4] text-[#15803D] hover:bg-[#DCFCE7]'
+                                }`}
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>
+                                  {t.cardio.flashcardsView.markUnderstoodBtn}
+                                </span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleMarkCardStatus(card, 'needs_revision')
+                                }
+                                className={`min-h-[38px] px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer ${
+                                  isNeedsRevision
+                                    ? 'bg-[#B91C1C] text-white'
+                                    : 'bg-[#FEF2F2] text-[#B91C1C] hover:bg-[#FEE2E2]'
+                                }`}
+                              >
+                                <RefreshCw className="w-3.5 h-3.5" />
+                                <span>
+                                  {t.cardio.flashcardsView.markNeedsRevisionBtn}
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-end gap-2 text-xs">
+                            <button
+                              type="button"
+                              onClick={() => openEditCardModal(card)}
+                              className="min-h-[34px] px-2.5 py-1 rounded-lg text-[#7D6B74] hover:text-[#51434A] hover:bg-[#FFF9F6] flex items-center gap-1 cursor-pointer"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                              <span>{t.common.edit}</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setCardToDelete(card)}
+                              className="min-h-[34px] px-2.5 py-1 rounded-lg text-[#7D6B74] hover:text-[#B91C1C] flex items-center gap-1 cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>{t.common.delete}</span>
+                            </button>
+                          </div>
+                        </div>
+                      </article>
+
+                      {/* BACK FACE: Answer & Reference */}
+                      <article className="flashcard-3d-face flashcard-3d-back rounded-3xl editorial-stationary rose-glass-sheen p-6 sm:p-7 flex flex-col justify-between space-y-5">
+                        <div className="space-y-3.5">
+                          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#7D6B74]">
+                            <span className="font-semibold text-[#51434A]">
+                              {getCatLabel(card.category)}
+                            </span>
+                            <span
+                              className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium ${
+                                isUnderstood
+                                  ? 'bg-[#F0FDF4] text-[#15803D]'
+                                  : isNeedsRevision
+                                  ? 'bg-[#FEF2F2] text-[#B91C1C]'
+                                  : 'bg-[#FFF9F6] text-[#7D6B74]'
+                              }`}
+                            >
+                              {isUnderstood
+                                ? t.cardio.flashcardsView.statusUnderstood
+                                : isNeedsRevision
+                                ? t.cardio.flashcardsView.statusNeedsRevision
+                                : t.cardio.flashcardsView.statusToStudy}
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-[#7D6B74] line-clamp-1 italic">
+                            {card.question}
+                          </p>
+
+                          <div
+                            onClick={() => toggleRevealCard(card.id)}
+                            className="pt-3 border-t border-[#EAE0D8] space-y-2 cursor-pointer"
+                          >
+                            <p className="text-[10px] uppercase tracking-wider text-[#15803D] font-semibold">
+                              {t.cardio.flashcardsView.backHeading}
+                            </p>
+                            <p className="text-sm text-[#51434A] leading-relaxed whitespace-pre-line">
+                              {card.answer}
+                            </p>
+                            <p className="text-[11px] text-[#7D6B74] italic pt-1">
+                              {card.lectureRef}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-[#EAE0D8]/70 space-y-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <button
+                              type="button"
+                              onClick={() => toggleRevealCard(card.id)}
+                              className="min-h-[42px] px-4 py-2 rounded-xl bg-[#F4DDE3]/80 hover:bg-[#E8A2B5]/50 text-xs font-semibold text-[#51434A] transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5 text-[#C97A92]" />
+                              <span>{t.cardio.flashcardsView.hideAnswerBtn}</span>
+                            </button>
+
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleMarkCardStatus(card, 'understood')
+                                }
+                                className={`min-h-[38px] px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer ${
+                                  isUnderstood
+                                    ? 'bg-[#15803D] text-white'
+                                    : 'bg-[#F0FDF4] text-[#15803D] hover:bg-[#DCFCE7]'
+                                }`}
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>
+                                  {t.cardio.flashcardsView.markUnderstoodBtn}
+                                </span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleMarkCardStatus(card, 'needs_revision')
+                                }
+                                className={`min-h-[38px] px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer ${
+                                  isNeedsRevision
+                                    ? 'bg-[#B91C1C] text-white'
+                                    : 'bg-[#FEF2F2] text-[#B91C1C] hover:bg-[#FEE2E2]'
+                                }`}
+                              >
+                                <RefreshCw className="w-3.5 h-3.5" />
+                                <span>
+                                  {t.cardio.flashcardsView.markNeedsRevisionBtn}
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-end gap-2 text-xs">
+                            <button
+                              type="button"
+                              onClick={() => openEditCardModal(card)}
+                              className="min-h-[34px] px-2.5 py-1 rounded-lg text-[#7D6B74] hover:text-[#51434A] hover:bg-[#FFF9F6] flex items-center gap-1 cursor-pointer"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                              <span>{t.common.edit}</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setCardToDelete(card)}
+                              className="min-h-[34px] px-2.5 py-1 rounded-lg text-[#7D6B74] hover:text-[#B91C1C] flex items-center gap-1 cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>{t.common.delete}</span>
+                            </button>
+                          </div>
+                        </div>
+                      </article>
                     </div>
-                  </article>
+                  </div>
                 );
               })}
             </div>

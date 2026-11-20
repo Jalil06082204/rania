@@ -42,6 +42,7 @@ import {
 } from './BotanicalOrnaments';
 import { ConfirmDialog } from './ConfirmDialog';
 import { ResilientImage } from './ResilientImage';
+import { Tilt3DCard } from './Tilt3DCard';
 
 interface LoveLettersProps {
   letters: OpenWhenLetter[];
@@ -135,6 +136,8 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
     letters[0]?.id || ''
   );
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState<boolean>(false);
+  const [isLetterRevealed, setIsLetterRevealed] = useState<boolean>(false);
+  const envelopeRevealTimerRef = useRef<number | null>(null);
   const [isLetterModalOpen, setIsLetterModalOpen] = useState(false);
   const [editingLetterId, setEditingLetterId] = useState<string | null>(null);
   const [letterOccasion, setLetterOccasion] = useState('');
@@ -179,9 +182,12 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
     null
   );
 
-  // Stop any playing audio when unmounting LoveLetters
+  // Stop any playing audio and clear pending envelope timers when unmounting
   useEffect(() => {
     return () => {
+      if (envelopeRevealTimerRef.current !== null) {
+        window.clearTimeout(envelopeRevealTimerRef.current);
+      }
       soundEngine.stopMusicBoxMelody();
       if (htmlAudioRef.current) {
         htmlAudioRef.current.pause();
@@ -249,19 +255,54 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
     setNoteContext('');
   };
 
-  // Envelope Selection & Opening Handlers
-  const handleSelectEnvelope = (letterId: string) => {
-    if (activeLetter?.id === letterId) {
-      setIsEnvelopeOpen((prev) => !prev);
-      return;
+  // Envelope Selection & 3D Opening Handlers
+  const clearEnvelopeTimer = () => {
+    if (envelopeRevealTimerRef.current !== null) {
+      window.clearTimeout(envelopeRevealTimerRef.current);
+      envelopeRevealTimerRef.current = null;
     }
-    setSelectedLetterId(letterId);
-    setIsEnvelopeOpen(false);
   };
 
   const handleBreakSealAndOpen = () => {
+    clearEnvelopeTimer();
     setIsEnvelopeOpen(true);
     soundEngine.playChime(soundEnabled);
+
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      setIsLetterRevealed(true);
+      return;
+    }
+
+    envelopeRevealTimerRef.current = window.setTimeout(() => {
+      setIsLetterRevealed(true);
+      envelopeRevealTimerRef.current = null;
+    }, 440);
+  };
+
+  const handleResealEnvelope = () => {
+    clearEnvelopeTimer();
+    setIsLetterRevealed(false);
+    setIsEnvelopeOpen(false);
+  };
+
+  const handleSelectEnvelope = (letterId: string) => {
+    if (activeLetter?.id === letterId) {
+      if (isEnvelopeOpen) {
+        handleResealEnvelope();
+      } else {
+        handleBreakSealAndOpen();
+      }
+      return;
+    }
+    clearEnvelopeTimer();
+    setSelectedLetterId(letterId);
+    setIsEnvelopeOpen(false);
+    setIsLetterRevealed(false);
   };
 
   // Open When Letter CRUD handlers
@@ -314,6 +355,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
       });
       setSelectedLetterId(createdId);
       setIsEnvelopeOpen(true);
+      setIsLetterRevealed(true);
       onNotify?.(t.toasts.letterAdded);
     }
     setIsLetterModalOpen(false);
@@ -1081,94 +1123,211 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
             </div>
           </div>
 
-          {/* Right: Interactive Envelope-Opening Animation & Stationery Reader (7 cols) */}
+          {/* Right: Interactive 3D Envelope-Opening Animation & Stationery Reader (7 cols) */}
           <div className="lg:col-span-7 space-y-5">
             {activeLetter ? (
-              <div className="rounded-[2rem] rose-glass-cream rose-glass-sheen p-4 sm:p-6 space-y-5">
-                {/* Interactive Fine Linen Envelope Stage */}
-                <div className="envelope-stage relative mx-auto max-w-xl">
-                  <div className="relative rounded-2xl bg-gradient-to-b from-[#FAF3EC] to-[#F3E9DD] border border-[#E5D6C8] shadow-sm overflow-hidden">
-                    {/* Top Triangular Flap SVG that rotates in 3D when opened */}
+              <div className="rounded-[2rem] rose-glass-cream rose-glass-sheen p-4 sm:p-7 space-y-6">
+                {/* Interactive 3D Linen Envelope Stage */}
+                <div
+                  className={`envelope-stage relative mx-auto max-w-xl transition-[padding] duration-500 ${
+                    isEnvelopeOpen ? 'pt-28 sm:pt-36' : 'pt-6 sm:pt-8'
+                  }`}
+                >
+                  <div
+                    className={`envelope-3d-body relative rounded-2xl border border-[#E5D6C8] shadow-[0_22px_48px_-18px_rgba(81,67,74,0.22)] ${
+                      isEnvelopeOpen ? 'translate-y-2' : 'hover:-translate-y-0.5'
+                    }`}
+                    style={{
+                      background:
+                        'linear-gradient(160deg, #FBF4EE 0%, #F4E7DA 55%, #F2DCE2 100%)',
+                    }}
+                  >
+                    {/* 3D Inner Envelope Backing & Rising Letter Slip */}
                     <div
-                      className={`envelope-flap relative z-20 w-full ${
-                        isEnvelopeOpen ? 'envelope-flap-open' : ''
-                      }`}
+                      className="relative h-56 sm:h-64 rounded-2xl overflow-visible"
+                      style={{ transformStyle: 'preserve-3d' }}
                     >
-                      <svg
-                        viewBox="0 0 600 150"
-                        className="w-full h-24 sm:h-28 block drop-shadow-xs"
-                        preserveAspectRatio="none"
+                      {/* Back Wall Interior Lining */}
+                      <div
+                        className="absolute inset-0 rounded-2xl border border-[#E8D5C8]/80"
+                        style={{
+                          background:
+                            'linear-gradient(180deg, #F4DDE3 0%, #F8EAE2 65%, #F3E9DD 100%)',
+                          transform: 'translateZ(0px)',
+                        }}
+                      />
+
+                      {/* Inner Letter Card Slip Rising Out of the Pocket in 3D */}
+                      <div
+                        className="envelope-card-insert absolute inset-x-4 sm:inset-x-6 top-5 bottom-4 rounded-xl bg-[#FFFDFB] border border-[#E8A2B5]/45 shadow-md px-5 py-4 flex flex-col justify-between pointer-events-none"
+                        style={{
+                          transform: isEnvelopeOpen
+                            ? 'translate3d(0, -34px, 14px) scale(1)'
+                            : 'translate3d(0, 12px, 2px) scale(0.95)',
+                          opacity: isEnvelopeOpen ? 1 : 0.72,
+                        }}
                       >
-                        <polygon
-                          points="0,0 600,0 300,138"
-                          fill="#F4DDE3"
-                          stroke="#E8A2B5"
-                          strokeWidth="2"
-                        />
-                      </svg>
-                    </div>
+                        <div className="flex items-center justify-between text-[10px] text-[#C97A92] font-medium">
+                          <span>{activeLetter.dateLabel}</span>
+                          <span>{t.forRania}</span>
+                        </div>
+                        <p className="font-serif-editorial italic text-sm sm:text-base text-[#51434A] line-clamp-2 leading-relaxed">
+                          “
+                          {activeLetter.content.split('\n\n')[1] ||
+                            activeLetter.content}
+                          ”
+                        </p>
+                        <div className="h-px w-16 bg-[#E8A2B5]/60 mx-auto" />
+                      </div>
 
-                    {/* Wax Seal Emblem in the center of the envelope */}
-                    <div
-                      className={`envelope-seal absolute left-1/2 top-14 sm:top-16 -translate-x-1/2 z-30 flex flex-col items-center ${
-                        isEnvelopeOpen ? 'envelope-seal-open' : ''
-                      }`}
-                    >
-                      <button
-                        type="button"
-                        onClick={handleBreakSealAndOpen}
-                        className="group p-2 rounded-full bg-white/90 border border-[#E8A2B5] shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer"
-                        aria-label={t.letters.breakSealBtn}
+                      {/* Left, Right & Bottom 3D Front Pocket Folds */}
+                      <div
+                        className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
+                        style={{ transform: 'translateZ(18px)' }}
                       >
-                        <WaxSealHeart className="w-11 h-11" />
-                      </button>
-                    </div>
+                        <svg
+                          viewBox="0 0 600 260"
+                          className="w-full h-full block"
+                          preserveAspectRatio="none"
+                        >
+                          {/* Left fold */}
+                          <polygon
+                            points="0,0 305,135 0,260"
+                            fill="#FBF4ED"
+                            stroke="#E6D5C8"
+                            strokeWidth="1.5"
+                          />
+                          {/* Right fold */}
+                          <polygon
+                            points="600,0 295,135 600,260"
+                            fill="#F8EFE7"
+                            stroke="#E6D5C8"
+                            strokeWidth="1.5"
+                          />
+                          {/* Bottom pocket fold */}
+                          <polygon
+                            points="0,260 300,115 600,260"
+                            fill="#FFF9F6"
+                            stroke="#E4CFC2"
+                            strokeWidth="1.5"
+                          />
+                        </svg>
 
-                    {/* Envelope Front Pocket & Rising Stationery Preview */}
-                    <div className="px-6 pb-6 pt-3 text-center space-y-3">
-                      <p className="text-xs text-[#7D6B74]">
-                        {isEnvelopeOpen
-                          ? t.letters.envelopeOpenedCaption
-                          : t.letters.envelopeSealedCaption}
-                      </p>
-                      <h3 className="font-serif-editorial text-xl sm:text-2xl text-[#51434A]">
-                        {activeLetter.occasion}
-                      </h3>
+                        {/* Envelope Front Pocket Label & Action Controls */}
+                        <div className="absolute inset-x-0 bottom-0 px-5 pb-4 pt-10 text-center space-y-1.5 pointer-events-auto">
+                          <p className="text-[11px] text-[#7D6B74]">
+                            {isEnvelopeOpen
+                              ? t.letters.envelopeOpenedCaption
+                              : t.letters.envelopeSealedCaption}
+                          </p>
+                          <h3 className="font-serif-editorial text-lg sm:text-2xl text-[#51434A] leading-tight">
+                            {activeLetter.occasion}
+                          </h3>
+                          <div className="pt-1 flex justify-center">
+                            {!isEnvelopeOpen ? (
+                              <button
+                                type="button"
+                                onClick={handleBreakSealAndOpen}
+                                className="min-h-[40px] px-5 py-1.5 rounded-xl bg-[#51434A] text-[#FFF9F6] text-xs font-medium hover:bg-[#3E3238] transition-all flex items-center gap-2 cursor-pointer shadow-xs"
+                              >
+                                <MailOpen className="w-3.5 h-3.5 text-[#E8A2B5]" />
+                                <span>{t.letters.breakSealBtn}</span>
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={handleResealEnvelope}
+                                className="min-h-[38px] px-4 py-1.5 rounded-xl border border-[#EAE0D8] bg-white/95 text-xs font-medium text-[#7D6B74] hover:text-[#51434A] transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                              >
+                                <Mail className="w-3.5 h-3.5 text-[#C97A92]" />
+                                <span>{t.letters.resealEnvelopeBtn}</span>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
 
-                      <div className="pt-1 flex justify-center">
-                        {!isEnvelopeOpen ? (
-                          <button
-                            type="button"
-                            onClick={handleBreakSealAndOpen}
-                            className="min-h-[42px] px-5 py-2 rounded-xl bg-[#51434A] text-[#FFF9F6] text-xs font-medium hover:bg-[#3E3238] transition-all flex items-center gap-2 cursor-pointer"
+                      {/* Top Hinged 3D Triangular Flap */}
+                      <div
+                        className={`envelope-flap absolute top-0 left-0 right-0 h-32 sm:h-36 ${
+                          isEnvelopeOpen
+                            ? 'envelope-flap-open z-10 pointer-events-none'
+                            : 'z-30'
+                        }`}
+                        style={{
+                          transform: isEnvelopeOpen
+                            ? 'translateZ(2px) rotateX(174deg)'
+                            : 'translateZ(20px) rotateX(0deg)',
+                        }}
+                      >
+                        {/* Outer Sealed Flap Face */}
+                        <div
+                          onClick={!isEnvelopeOpen ? handleBreakSealAndOpen : undefined}
+                          className={`envelope-flap-face absolute inset-0 ${
+                            !isEnvelopeOpen ? 'cursor-pointer' : ''
+                          }`}
+                        >
+                          <svg
+                            viewBox="0 0 600 150"
+                            className="w-full h-full block drop-shadow-sm"
+                            preserveAspectRatio="none"
                           >
-                            <MailOpen className="w-3.5 h-3.5 text-[#E8A2B5]" />
-                            <span>{t.letters.breakSealBtn}</span>
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => setIsEnvelopeOpen(false)}
-                            className="min-h-[38px] px-4 py-1.5 rounded-xl border border-[#EAE0D8] bg-white/90 text-xs font-medium text-[#7D6B74] hover:text-[#51434A] transition-colors flex items-center gap-1.5 cursor-pointer"
+                            <polygon
+                              points="0,0 600,0 300,142"
+                              fill="#F6E2E8"
+                              stroke="#E8A2B5"
+                              strokeWidth="2"
+                            />
+                          </svg>
+                        </div>
+
+                        {/* Inner Unfolded Blush Lining Face (visible when opened in 3D) */}
+                        <div className="envelope-flap-inner absolute inset-0">
+                          <svg
+                            viewBox="0 0 600 150"
+                            className="w-full h-full block"
+                            preserveAspectRatio="none"
                           >
-                            <Mail className="w-3.5 h-3.5 text-[#C97A92]" />
-                            <span>{t.letters.resealEnvelopeBtn}</span>
-                          </button>
-                        )}
+                            <polygon
+                              points="0,0 600,0 300,142"
+                              fill="#F4DDE3"
+                              stroke="#E5C8D0"
+                              strokeWidth="1.5"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Interactive Wax Seal Heart Centered on Flap Tip */}
+                      <div
+                        className={`envelope-seal absolute left-1/2 top-[102px] sm:top-[116px] z-40 flex flex-col items-center ${
+                          isEnvelopeOpen ? 'opacity-0 pointer-events-none' : ''
+                        }`}
+                        style={{
+                          transform: isEnvelopeOpen
+                            ? 'translate3d(-50%, -20px, 24px) scale(0.76) rotateZ(-8deg)'
+                            : 'translate3d(-50%, 0, 28px)',
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={handleBreakSealAndOpen}
+                          className="group p-2 rounded-full bg-white/95 border border-[#E8A2B5] shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+                          aria-label={t.letters.breakSealBtn}
+                        >
+                          <WaxSealHeart className="w-11 h-11" />
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Unfolded Stationery Letter Sheet */}
-                <article
-                  key={`${activeLetter.id}-${isEnvelopeOpen ? 'open' : 'sealed'}`}
-                  className={`rounded-[1.5rem] editorial-stationary rose-glass-sheen p-7 sm:p-11 space-y-7 envelope-letter-rise ${
-                    isEnvelopeOpen
-                      ? 'translate-y-0 opacity-100'
-                      : 'translate-y-1 opacity-95'
-                  }`}
-                >
+                {/* Unfolded Stationery Letter Sheet (Reveals after 3D flap unfolds) */}
+                {isLetterRevealed && (
+                  <article
+                    key={`${activeLetter.id}-revealed`}
+                    className="rounded-[1.5rem] editorial-stationary rose-glass-sheen p-7 sm:p-11 space-y-7 envelope-letter-rise animate-page-enter"
+                  >
                   <div className="flex flex-wrap items-start justify-between gap-4 pb-6 border-b border-[#EAE0D8]">
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2 text-xs text-[#7D6B74]">
@@ -1212,7 +1371,8 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
                     <BotanicalSprig className="w-28 h-6" />
                     <WaxSealHeart className="w-8 h-8" />
                   </div>
-                </article>
+                  </article>
+                )}
               </div>
             ) : null}
           </div>
@@ -1647,8 +1807,11 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {localizedMemories.map((mem) => (
-              <article
+              <Tilt3DCard
                 key={mem.id}
+                as="article"
+                maxTiltDeg={6.5}
+                scaleOnHover={1.016}
                 className="rounded-3xl editorial-card editorial-card-interactive rose-glass-sheen p-3.5 flex flex-col justify-between group"
               >
                 <div>
@@ -1697,7 +1860,7 @@ export const LoveLetters: React.FC<LoveLettersProps> = ({
                     </button>
                   </div>
                 )}
-              </article>
+              </Tilt3DCard>
             ))}
           </div>
         )}

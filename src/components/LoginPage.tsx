@@ -17,6 +17,7 @@ import {
   VoiceRecording,
 } from '../types';
 import { soundEngine } from '../utils/sound';
+import { emitRoseGoldSparkles } from '../utils/sparkles';
 import { AmbientAurora } from './AmbientAurora';
 import {
   BotanicalSprig,
@@ -24,6 +25,8 @@ import {
   WaxSealHeart,
 } from './BotanicalOrnaments';
 import { ResilientImage } from './ResilientImage';
+import { SparkleCanvas } from './SparkleCanvas';
+import { Tilt3DCard } from './Tilt3DCard';
 
 export interface UnlockedSanctuaryState {
   settings: AppSettings;
@@ -113,6 +116,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       setIsSubmitting(false);
       setIsUnlocking(true);
       soundEngine.playChime(true);
+      emitRoseGoldSparkles('unlock');
 
       // Subtle romantic heart animation before transitioning to the Home Dashboard
       window.setTimeout(() => {
@@ -127,6 +131,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="min-h-screen w-full bg-transparent text-[#51434A] flex flex-col justify-between relative overflow-hidden px-4 sm:px-8 py-6 sm:py-10">
       <AmbientAurora mode="gate" />
+      <SparkleCanvas />
 
       {/* Top Editorial Bar */}
       <header className="relative z-10 max-w-5xl w-full mx-auto flex items-center justify-between">
@@ -145,13 +150,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
       {/* Main Centered Romantic Entrance Card */}
       <main className="relative z-10 max-w-xl w-full mx-auto my-auto py-8">
-        <div
-          className={`relative rounded-[2.25rem] editorial-stationary rose-glass-sheen transition-all duration-700 px-6 sm:px-12 py-10 sm:py-14 text-center overflow-hidden ${
-            isUnlocking
-              ? 'border-[#E8A2B5] ring-4 ring-[#F4DDE3]/70 scale-[1.01]'
-              : ''
-          }`}
-        >
+        <Tilt3DCard maxTiltDeg={5.5} scaleOnHover={1.008} disabled={isUnlocking}>
+          <div
+            className={`relative rounded-[2.25rem] editorial-stationary rose-glass-sheen transition-all duration-700 px-6 sm:px-12 py-10 sm:py-14 text-center overflow-hidden ${
+              isUnlocking
+                ? 'border-[#E8A2B5] ring-4 ring-[#F4DDE3]/70 scale-[1.01]'
+                : ''
+            }`}
+          >
           {/* Delicate Corner Botanical Flourishes */}
           <FloralCornerFlourish className="hidden sm:block absolute top-4 left-4 w-16 h-16 pointer-events-none" />
           <FloralCornerFlourish className="hidden sm:block absolute top-4 right-4 w-16 h-16 -scale-x-100 pointer-events-none" />
@@ -303,6 +309,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             )}
           </div>
         </div>
+        </Tilt3DCard>
       </main>
 
       {/* Discreet Creator Credit Footer */}
